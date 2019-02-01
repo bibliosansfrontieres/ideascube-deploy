@@ -52,7 +52,22 @@
    - /lib/systemd/system/rabbitmq-server.service
    # - /etc/hotplug.d/iface/25-dnsmasq
    - /etc/django-fastcgi
-   # - nginx.conf
-   # - nginx.default
+   - /etc/init.d/celeryd
+   - /etc/init.d/django-fastcgi
+   - /etc/init.d/nginx
+   - /etc/init.d/rabbitmq-server
+   - /var/www/
+   - /media/uploaded
+   - /media/preloaded/
+   - /customize_brand/
+   - /etc/celeryd.default
+   - /etc/celeryd.init
+   - /etc/config-backup.tar.gz
+   - /etc/config-backup.tar.gz.dpkg-old
+   - /etc/django-fastcgi
+   - /etc/nginx/
+   - /etc/nginx.conf
+   - /etc/nginx.default
+   - /etc/rabbitmq/
    - /srv/
    - /etc/hotplug.d/iface/90-ar2f
