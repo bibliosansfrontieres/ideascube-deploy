@@ -2,7 +2,8 @@
 - hosts: all
 
   roles:
-    - cleanup
+    - role: cleanup
+      tags: cleanup
 
     - role: update_device_config
       tags: always
