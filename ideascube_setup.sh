@@ -5,6 +5,7 @@ GIT_REPO_URL="https://github.com/bibliosansfrontieres/ideascube-deploy.git"
 ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 BRANCH="master"
+GIT_RELEASE_TAG="v1.0"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
@@ -60,7 +61,7 @@ echo "Checking file access" >> /var/log/ansible-pull.log
 
 cd $ANSIBLECAP_PATH
 
-echo "$ANSIBLE_BIN -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @device.json" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "$ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @device.json" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
 $ANSIBLE_BIN -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@device.json"
