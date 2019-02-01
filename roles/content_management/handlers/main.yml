@@ -1,0 +1,3 @@
+---
+- name: Restart Kiwix
+  command: balena-engine container restart {{ containers[2].name }}

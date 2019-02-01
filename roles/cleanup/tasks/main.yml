@@ -1,0 +1,58 @@
+---
+- name: Stop services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+  with_items:
+    - uhttpd.service
+    - rabbitmq-server.service
+    - django-fastcgi
+    - celeryd.service
+    - nginx.service
+  ignore_errors: yes
+
+- name: Disable services
+  systemd:
+    name: "{{ item }}"
+    enabled: no
+  with_items:
+    - uhttpd.service
+    - rabbitmq-server.service
+    - django-fastcgi
+    - celeryd.service
+    - nginx.service
+  ignore_errors: yes
+
+# - name: Enable services
+#   systemd:
+#     name: "{{ item }}"
+#     enabled: yes
+#   with_items:
+#     - dnsmasq
+
+- name: Remove unwanted packages before upgrading
+  apt:
+    name: "{{ packages }}"
+    state: absent
+    purge: yes
+  vars:
+    packages:
+    - nginx
+
+- name: Remove unwanted files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+   - /etc/nginx/
+   # - /lib/systemd/system/ubus.service
+   - /lib/systemd/system/contenthub-usb.service
+   # - /lib/systemd/system/ubox.service
+   - /lib/systemd/system/uhttpd.service
+   - /lib/systemd/system/rabbitmq-server.service
+   # - /etc/hotplug.d/iface/25-dnsmasq
+   - /etc/django-fastcgi
+   # - nginx.conf
+   # - nginx.default
+   - /srv/
+   - /etc/hotplug.d/iface/90-ar2f

@@ -1,0 +1,34 @@
+---
+- name: Add PPA for Ansible
+  apt_repository:
+    repo: ppa:ansible/ansible
+    update_cache: yes
+
+- name: Install required package
+  apt:
+    name: ansible
+    state: latest
+
+- name: Create local directory to work from
+  file:
+    path: /var/lib/ansible/local
+    state: directory
+    owner: root
+    group: root
+    mode: 0751
+
+- name: Create ansible hosts directory to work from
+  file:
+    path: /etc/ansible/
+    state: directory
+    owner: root
+    group: root
+    mode: 0751
+
+- name: Copy ansible inventory file to client
+  copy:
+    src: hosts
+    dest: /etc/ansible/hosts
+    owner: root
+    group: root
+    mode: 0644

@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title>{{project_type}}</title>
+	<meta http-equiv="refresh" content="3;url=$authtarget">
+</head>
+<body bgcolor="#c3dae6" text="black">
+
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tr>
+	<td align="center"><h3>You will now be redirected to <a href=http://{{project_type}}>{{project_type}}</a></h3></td>
+</tr>
+<tr>
+	<td align="center" height="120">
+<!--
+	A client is authenticated by requesting the page $authtarget.
+	So, href to it here, with an img or link text the user can click on.
+	Also, note that any images you reference must reside in the
+	subdirectory that is the value of $imagesdir (default: "images").
+
+	Available variables:
+	error_msg: $error_msg
+	gatewayname: $gatewayname
+	tok: $tok
+	redir: $redir
+	authaction: $authaction
+	denyaction: $denyaction
+	authtarget: $authtarget
+	clientip: $clientip
+	clientmac: $clientmac
+	gatewaymac: $gatewaymac
+	nclients: $nclients
+	maxclients: $maxclients
+	uptime: $uptime
+	imagesdir: $imagesdir
+	pagesdir: $pagesdir
+
+	Variables that can be passed back via HTTP GET.
+	Just append them to the authentication link:
+	nodoguser
+	nodogpass
+	info
+	voucher
+-->
+	</td>
+</tr>
+</table>
+
+</body>
+</html>

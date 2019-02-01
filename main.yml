@@ -1,0 +1,14 @@
+---
+- hosts: all
+
+  roles:
+    - cleanup
+
+    - role: update_device_config
+      tags: always
+
+    - setup_system
+    - tinc
+    - balena-engine
+    - containers
+    - content_management

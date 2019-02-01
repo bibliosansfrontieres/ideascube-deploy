@@ -1,0 +1,63 @@
+---
+- name: Reconfigure openssh-server
+  shell: rm -f /etc/ssh/*key* && dpkg-reconfigure openssh-server
+
+- name: Make sure central_server pubkey is in known_hosts
+  copy:
+    src: known_hosts
+    dest: /root/.ssh/known_hosts
+    owner: root
+    group: root
+    mode: 0644
+
+# - name: Copy ssh_agent
+#   template:
+#     src: ssh_agent.j2
+#     dest: /usr/local/bin/ssh_agent.sh
+#     mode: 0755
+
+- name: Download ansiblecap default ssh keys
+  get_url:
+    url: http://ansiblecapsshkey.kawax.cinema.montreuil.wan.bsf-intranet.org/{{item}}
+    dest: /root/.ssh/{{item}}
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - id_rsa
+    - id_rsa.pub
+  when: cache_machine.state|default(omit) == "present"
+
+- name: Generate a new ssh key
+  shell: ssh-keygen -t rsa -b 4096 -C "{{ full_device_name }}" -f /root/.ssh/{{ full_device_name }} -N ""
+  ignore_errors: yes
+
+- name: Set file permission
+  file:
+    path: /root/.ssh/{{item}}
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - id_rsa
+    - id_rsa.pub
+
+- name: Push new ssh on central server
+  shell: cat /root/.ssh/"{{ full_device_name }}".pub | ssh -i /root/.ssh/id_rsa root@tincmaster.wan.bsf-intranet.org "cat >> /home/ansible/.ssh/authorized_keys"
+
+- name: Remove ansiblecap default ssh keys
+  file:
+    path: /root/.ssh/{{item}}
+    state: absent
+  with_items:
+    - id_rsa
+    - id_rsa.pub
+  when: cache_machine.state|default(omit) == "present"
+
+- name: Copy ssh config file
+  template:
+    src: ssh_config.j2
+    dest: /root/.ssh/config
+    owner: root
+    group: root
+    mode: 0644

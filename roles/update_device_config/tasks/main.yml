@@ -1,0 +1,108 @@
+---
+- name: Guess if project type is ideasbox
+  set_fact:
+    project_type: ideasbox
+  when: project_name | regex_search('(idb)') == "idb"
+
+- name: Guess if project type is KoomBook
+  set_fact:
+    project_type: koombook
+  when: project_name | regex_search('(kb)') == "kb"
+
+- name: Guess if project type is Ideascube
+  set_fact:
+    project_type: ideascube
+  when: project_name | regex_search('(idc)') == "idc"
+
+- name: Set device name variable
+  set_fact:
+    hostname: "{{ project_name }}"
+    full_device_name: "{{ project_name }}-{{ ansible_default_ipv4.macaddress[11:17] | replace(':', '') }}"
+
+- debug: msg="Start playbook {{ ansible_date_time["date"] }} - {{ ansible_date_time["time"] }} - I'm a {{ project_type }} / {{full_device_name}}"
+
+- name: Ensure custom facts directory exists
+  file:
+    path: /etc/ansible/facts.d
+    recurse: yes
+    state: directory
+
+- name: Copy device configuration
+  copy:
+    src: device.json
+    dest: /etc/ansible/facts.d/device.json
+    mode: 0666
+
+- name: Remove existing device name (firstStart.csv)
+  file:
+    path: /etc/firstStart.csv
+    state: absent
+  tags:
+    - reset_config
+
+- name: Drop hosts file on device
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+
+# - name: Add domain name entry in /etc/hosts if a cache machine is around
+#   command: /etc/NetworkManager/dispatcher.d/02koombook-doctor {{ lan_interface }} up
+#   when: cache_machine.state|default(omit) ==  "present"
+
+- name: Switch to FDN DNS server
+  command: uci set dhcp.@dnsmasq[0].server='80.67.169.12'
+
+- name: Server entries in /etc/hosts
+  command: uci set dhcp.@dnsmasq[0].domain='lan'
+
+- name: Ensure dnsmasq address is not present
+  shell: uci get dhcp.@dnsmasq[0].address ; echo
+  register: conf
+
+- name: Resolv domain and sub-domaine to AP ip address
+  command: uci add_list dhcp.@dnsmasq[0].address='/{{project_type}}/192.168.1.1'
+  when: conf.stdout == ""
+
+- name: Change nodogsplash URL to redirect to
+  command: uci set nodogsplash.@instance[0].redirecturl='http://{{project_type}}'
+
+- name: Set gateway name
+  command: uci set nodogsplash.@instance[0].gatewayname='{{project_type}}'
+
+- name: Enable nodogsplash
+  command: uci set nodogsplash.@instance[0].enabled='1'
+
+- name: Set hostname
+  command: uci set system.@system[0].hostname='{{project_type}}'
+
+- name: Set system wide hostname
+  shell: echo {{ full_device_name }} > /etc/hostname
+
+- name: Set timezone
+  command: uci set system.@system[0].timezone='{{ timezone }}'
+
+- name: Change SSID for 2.4Ghz
+  command: uci set wireless.@wifi-iface[0].ssid='{{full_device_name}}-2.4G'
+
+- name: Change SSID for 5Ghz
+  command: uci set wireless.@wifi-iface[1].ssid='{{full_device_name}}-5G'
+
+- name: Commit changes
+  command: uci commit {{item}}
+  with_items:
+    - dhcp
+    - nodogsplash
+    - system
+    - wireless
+
+- name: Modify nodogsplash html page
+  template:
+    src: splash.html.j2
+    dest: /etc/nodogsplash/htdocs/splash.html
+
+- block:
+  - name: Check if a local_cache_server cache machine is present on the local network
+    wait_for: host="{{ local_cache_server }}" port=80 state=present timeout=3
+    register: cache_machine
+  rescue:
+  - debug: msg="No cache machine has been detected on the local network"

@@ -1,0 +1,6 @@
+---
+- include: ideascube.yml
+  tags: import_ideascube_content
+
+- include: kolibri.yml
+  tags: import_kolibri_content

@@ -1,0 +1,14 @@
+---
+- name: Ensure the HDD mountpoint exists
+  file:
+    path: /media/hdd
+    state: directory
+    mode: 0755
+
+- name: Mount /dev/sda1
+  mount:
+    name: /media/hdd/
+    src: /dev/sda1
+    fstype: ext4
+    state: mounted
+    opts: noatime,nofail

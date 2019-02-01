@@ -1,0 +1,101 @@
+---
+
+- name: Create a folder for configuration file
+  file:
+    path: /media/hdd/{{item}}
+    recurse: yes
+    state: directory
+  with_items:
+    - config-files/traefik
+    - config-files/nginx
+    - config-files/uwsgi
+    - ideascube/main
+
+- name: Copy configuration files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'traefik.toml', dest: '/media/hdd/config-files/traefik/traefik.toml' }
+    - { src: 'default.conf', dest: '/media/hdd/config-files/nginx/default.conf' }
+    - { src: 'nginx.conf', dest: '/media/hdd/config-files/nginx/nginx.conf' }
+    - { src: 'ideascube.ini', dest: '/media/hdd/config-files/uwsgi/ideascube.ini' }
+    - { src: 'uwsgi_params', dest: '/media/hdd/ideascube/'}
+
+- name: Pull traefik from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: traefik
+    image: bibliosansfrontieres/traefik
+    published_ports:
+      - 8080:8080
+      - 80:80
+    restart_policy: always
+    state: started
+    volumes:
+      - /media/hdd/config-files/traefik/traefik.toml:/etc/traefik/traefik.toml
+      - /var/run/balena-engine.sock:/var/run/docker.sock
+
+- name: Create a volume for the ideascube socket
+  docker_volume:
+    docker_host: unix://var/run/balena-engine.sock
+    name: idc
+
+- name: Pull ideascube from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: "{{ containers[0].name }}"
+    image: "{{ containers[0].image_id }}"
+    env:
+      IDEASCUBE_ID: "idc"
+      DOMAIN: "{{project_type}}"
+      DEBUG: "False"
+    published_ports: 9000:9000
+    restart_policy: always
+    state: started
+    labels: "traefik.frontend.rule=Host:{{ containers[0].name }}.{{project_type}}"
+    volumes:
+      - /media/hdd/ideascube:/var/ideascube
+      - /media/hdd/ideascube:/var/cache/ideascube
+      - /media/hdd/config-files/uwsgi/ideascube.ini:/tmp/ideascube.ini
+      - idc:/IDCsocket
+
+- name: Pull Nginx from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: nginx
+    image: bibliosansfrontieres/nginx:i386
+    published_ports: 8000:80
+    restart_policy: always
+    state: started
+    labels: traefik.frontend.rule=Host:"{{project_type}}"
+    volumes:
+      - /media/hdd/ideascube/static/:/var/ideascube/static/
+      - /media/hdd/ideascube/main/media/:/var/ideascube/main/media/
+      - /media/hdd/ideascube/mediacenter:/var/ideascube/mediacenter
+      - /media/hdd/config-files/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /media/hdd/config-files/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /media/hdd/ideascube/uwsgi_params:/var/ideascube/uwsgi_params
+      - idc:/IDCsocket
+
+- name: Pull Kolibri from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: "{{ containers[1].name }}"
+    image: "{{ containers[1].image_id }}"
+    published_ports: 5000:8080
+    restart_policy: always
+    state: started
+    labels: "traefik.frontend.rule=Host:{{ containers[1].name }}.{{project_type}}"
+    volumes: "/media/hdd/kolibri:/root/.kolibri/"
+
+- name: Pull Kiwix from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: "{{ containers[2].name }}"
+    image: "{{ containers[2].image_id }}"
+    published_ports: 3000:3000
+    restart_policy: always
+    state: started
+    labels: "traefik.frontend.rule=Host:{{ containers[2].name }}.{{project_type}}"
+    volumes: "/media/hdd/ideascube/kiwix:/var/ideascube/kiwix"

@@ -1,0 +1,110 @@
+---
+- include_vars: group_vars/{{ ansible_architecture }}.yml
+
+- name: Fix broken package
+  shell: dpkg --configure -a
+  tags:
+    - packages
+
+- name: Install all required package
+  apt:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - git
+    - lsb-release
+    - vim
+    - locate
+    - unzip
+    - bash-completion
+    - hdparm
+    - ncurses-term
+    - libffi-dev
+    - libssl-dev
+    - tree
+    - screen
+    - iftop
+    - tmux
+    - mtr-tiny
+    - libwww-perl
+    - httpie
+    - lshw
+    - hwinfo
+    - elinks
+    - mosh
+    - curl
+    - apt-transport-https
+    - iotop
+    - htop
+    - anacron
+    - rsync
+    - avahi-daemon
+    - libnss-mdns
+    - avahi-utils
+    - software-properties-common
+    - ca-certificates
+  tags:
+    - packages
+
+# - name: Upgrade all safe packages
+#   apt:
+#     upgrade: safe
+#   tags:
+#     - packages
+
+- name: Copy timesyncd.conf
+  copy:
+    src: timesyncd.conf
+    dest: /etc/systemd/timesyncd.conf
+
+- name: Enable systemd-timesyncd
+  command: timedatectl set-ntp true
+
+- name: Ensure locale en_US.UTF-8 locale is present
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: Remove the existing localtime file
+  file:
+    path: /etc/localtime
+    state: absent
+
+- name: Set a new localtime file corresponding to the timezone
+  file:
+    src: /usr/share/zoneinfo/{{ timezone }}
+    dest: /etc/localtime
+    state: link
+    force: yes
+
+- name: Set timezone variables
+  copy:
+    content: "{{ timezone }}"
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify: update timezone
+
+- include: storage.yml
+  tags: storage
+
+- include: user_management.yml
+  tags: user_management
+
+- include: ssh_config.yml
+  tags: ssh_config
+
+- include: ansible.yml
+  tags: install_ansible
+
+- name: Write all the variables in /etc/firstStart.csv
+  copy: content="id,{{ ansible_date_time["date"] }},{{ ansible_date_time["time"] }},{{ full_device_name }},{{ ansible_machine_id }},{{ ansible_default_ipv4["macaddress"]  | default (omit) }},{{ ansible_default_ipv4["address"] | default (omit) }}\n" dest=/etc/firstStart.csv
+  when: firststart.stat.exists == False or firststart is undefined
+
+- name: Send this file over the central_server
+  raw: cat /etc/firstStart.csv | ssh {{ central_server }} "cat >> ./ansible/UUID/firstStart.csv"

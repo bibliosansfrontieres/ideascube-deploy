@@ -1,0 +1,49 @@
+---
+- name: Download balenad binary & extract balena
+  unarchive:
+    src: https://github.com/balena-os/balena-engine/releases/download/v17.12.0/balena-engine-v17.12.0-i386.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+    extra_opts: ['--strip-components=1']
+
+- name: Ensure group balena exists
+  group:
+    name: balena-engine
+    state: present
+
+- name: Copy systemd unit service
+  copy:
+    src: balena-engine.service
+    dest: /etc/systemd/system/balena-engine.service
+
+- name: Copy systemd unit service
+  copy:
+    src: balena-engine.socket
+    dest: /etc/systemd/system/balena-engine.socket
+
+- name: Create balena-engine directory
+  file:
+    path: /etc/balena-engine/
+    recurse: yes
+    state: directory
+
+- name: Enable overlay
+  copy:
+    src: daemon.json
+    dest: /etc/balena-engine/daemon.json
+
+- name: Enable balena service
+  systemd:
+    name: balena-engine
+    state: started
+    daemon_reload: yes
+
+- name: Install a Python library for the Docker Engine API
+  pip:
+    name: docker
+
+- name: Execute balena-engine startup script when br-lan interface is up AND firewall already launch
+  copy:
+    src: 40-balena-engine
+    dest: /etc/hotplug.d/iface/40-balena-engine
+    mode: 0775
