@@ -112,7 +112,7 @@
 
 - name: Enable unit tinc
   service:
-    name: tinc@{{ vpn_name }.service
+    name: tinc@{{ vpn_name }}.service
     enabled: yes
     state: started
 
