@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ANSIBLECAP_PATH="/var/lib/ansible/local"
-GIT_REPO_URL="https://github.com/bibliosansfrontieres/ansiblecap.git"
+GIT_REPO_URL="https://github.com/bibliosansfrontieres/ideascube-deploy.git"
 ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 BRANCH="master"
