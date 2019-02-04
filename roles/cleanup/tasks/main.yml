@@ -23,14 +23,16 @@
     - nginx.service
   ignore_errors: yes
 
-# - name: Enable services
-#   systemd:
-#     name: "{{ item }}"
-#     enabled: yes
-#   with_items:
-#     - dnsmasq
+- name: Enable services
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - dnsmasq
+    - firewall
+    - nodogsplash
 
-- name: Remove unwanted packages before upgrading
+- name: Remove unwanted packages
   apt:
     name: "{{ packages }}"
     state: absent
@@ -38,6 +40,19 @@
   vars:
     packages:
     - nginx
+    - contenthub-usb
+    - intel-content-hub
+    - apport
+    - cloud-guest-utils
+    - cloud-initramfs-copymods
+    - cloud-initramfs-dyn-netconf
+    - comgt
+    - erlang-base
+    - nginx-common
+    - nginx-light
+    - ppp
+    - rabbitmq-server
+    - uhttpd
 
 - name: Remove unwanted files
   file:
@@ -45,14 +60,29 @@
     state: absent
   with_items:
    - /etc/nginx/
-   # - /lib/systemd/system/ubus.service
    - /lib/systemd/system/contenthub-usb.service
-   # - /lib/systemd/system/ubox.service
    - /lib/systemd/system/uhttpd.service
    - /lib/systemd/system/rabbitmq-server.service
-   # - /etc/hotplug.d/iface/25-dnsmasq
    - /etc/django-fastcgi
-   # - nginx.conf
-   # - nginx.default
+   - /etc/init.d/celeryd
+   - /etc/init.d/django-fastcgi
+   - /etc/init.d/nginx
+   - /etc/init.d/rabbitmq-server
+   - /var/www/
+   - /media/uploaded
+   - /media/preloaded/
+   - /customize_brand/
+   - /etc/celeryd.default
+   - /etc/celeryd.init
+   - /etc/config-backup.tar.gz
+   - /etc/config-backup.tar.gz.dpkg-old
+   - /etc/django-fastcgi
+   - /etc/nginx/
+   - /etc/nginx.conf
+   - /etc/nginx.default
+   - /etc/rabbitmq/
    - /srv/
    - /etc/hotplug.d/iface/90-ar2f
+   - /etc/udev/rules.d/81-modem.rules
+   - /var/lib/ansible/local/20-firewall
+   - /var/lib/ansible/local/25-dnsmasq
