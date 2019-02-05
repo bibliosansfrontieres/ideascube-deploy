@@ -23,13 +23,6 @@
     - nginx.service
   ignore_errors: yes
 
-# - name: Enable services
-#   systemd:
-#     name: "{{ item }}"
-#     enabled: yes
-#   with_items:
-#     - dnsmasq
-
 - name: Remove unwanted packages before upgrading
   apt:
     name: "{{ packages }}"
@@ -38,6 +31,14 @@
   vars:
     packages:
     - nginx
+
+- name: Copy tweaked hotplug.d service script
+  copy:
+    src: "{{item}}"
+    dest: /etc/hotplug.d/iface/{{item}}
+  with_items:
+    - 20-firewall
+    - 25-dnsmasq
 
 - name: Remove unwanted files
   file:
@@ -56,3 +57,4 @@
    # - nginx.default
    - /srv/
    - /etc/hotplug.d/iface/90-ar2f
+   - /etc/hotplug.d/iface/40-balena-engine

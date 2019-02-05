@@ -1,0 +1,12 @@
+#!/bin/sh
+
+[ "$ACTION" = ifup -o "$ACTION" = ifupdate ] || exit 0
+[ "$ACTION" = ifupdate -a -z "$IFUPDATE_ADDRESSES" -a -z "$IFUPDATE_DATA" ] && exit 0
+
+/etc/init.d/firewall start
+
+firewall3 -q network "$INTERFACE" >/dev/null || exit 0
+
+sleep 2
+#avoid race condition to firewall
+/etc/init.d/nodogsplash restart
