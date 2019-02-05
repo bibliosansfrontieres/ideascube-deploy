@@ -42,9 +42,3 @@
 - name: Install a Python library for the Docker Engine API
   pip:
     name: docker
-
-- name: Execute balena-engine startup script when br-lan interface is up AND firewall already launch
-  copy:
-    src: 40-balena-engine
-    dest: /etc/hotplug.d/iface/40-balena-engine
-    mode: 0775
