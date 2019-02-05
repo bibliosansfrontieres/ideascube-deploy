@@ -36,6 +36,7 @@
   systemd:
     name: balena-engine
     state: started
+    enabled: yes
     daemon_reload: yes
 
 - name: Install a Python library for the Docker Engine API

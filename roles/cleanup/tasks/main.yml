@@ -23,12 +23,14 @@
     - nginx.service
   ignore_errors: yes
 
-# - name: Enable services
-#   systemd:
-#     name: "{{ item }}"
-#     enabled: yes
-#   with_items:
-#     - dnsmasq
+- name: Enable services
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - dnsmasq
+    - firewall
+    - nodogsplash
 
 - name: Remove unwanted packages before upgrading
   apt:
@@ -56,3 +58,6 @@
    # - nginx.default
    - /srv/
    - /etc/hotplug.d/iface/90-ar2f
+   - /etc/hotplug.d/iface/20-firewall
+   - /etc/hotplug.d/iface/25-dnsmasq
+   - /etc/hotplug.d/iface/40-balena-engine

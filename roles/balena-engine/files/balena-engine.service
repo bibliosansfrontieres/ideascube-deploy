@@ -1,7 +1,7 @@
 [Unit]
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
-After=network-online.target procd.service
+After=firewall
 Wants=network-online.target
 Requires=balena-engine.socket
 
