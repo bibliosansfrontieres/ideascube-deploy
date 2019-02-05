@@ -34,7 +34,7 @@
 
 - name: Copy tweaked hotplug.d service script
   copy:
-    src: {{item}}
+    src: "{{item}}"
     dest: /etc/hotplug.d/iface/{{item}}
   with_items:
     - 20-firewall
