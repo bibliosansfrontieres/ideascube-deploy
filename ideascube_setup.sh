@@ -5,7 +5,7 @@ GIT_REPO_URL="https://github.com/bibliosansfrontieres/ideascube-deploy.git"
 ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 BRANCH="master"
-GIT_RELEASE_TAG="v1.1"
+GIT_RELEASE_TAG="v1.1.1"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
