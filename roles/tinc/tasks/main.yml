@@ -118,4 +118,4 @@
 
 - name: send the public key to central nodes
   shell: rsync /etc/tinc/{{ vpn_name }}/hosts/{{device_tinc_name}}  {{ central_server }}:/ansible/tinc-{{ vpn_name }}/
-  when: got_the_key.state|default(omit) == "present"
+  when: got_the_key.changed == True
