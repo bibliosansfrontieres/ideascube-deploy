@@ -85,12 +85,12 @@ do
     shift
 done
 
+wget https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/device.json -O /var/lib/ansible/device.json
+
 cd $ANSIBLECAP_PATH
 
-wget https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/device.json
-
-echo "$ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @device.json $TAG" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "$ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars /var/lib/ansible/@device.json $TAG" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
 # $ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@device.json" $TAG
-$ANSIBLE_BIN -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@device.json" $TAG
+$ANSIBLE_BIN -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "/var/lib/ansible/@device.json" $TAG
