@@ -2,7 +2,8 @@
 
 This set of roles and tasks hack and configure a CMAL device with belena-engine (Moby-based container engine) and pull Docker images like Ideascube, Kiwix, Kolibri, traefik, etc.
 
-## First setup
+
+## Initialization
 
 ```
 curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash
