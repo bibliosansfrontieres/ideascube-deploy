@@ -27,12 +27,6 @@
     recurse: yes
     state: directory
 
-- name: Copy device configuration
-  copy:
-    src: device.json
-    dest: /etc/ansible/facts.d/device.json
-    mode: 0666
-
 - name: Remove existing device name (firstStart.csv)
   file:
     path: /etc/firstStart.csv
