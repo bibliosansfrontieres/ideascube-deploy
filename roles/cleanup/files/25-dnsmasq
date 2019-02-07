@@ -1,8 +1,29 @@
 #!/bin/sh
 
-. $IPKG_INSTROOT/lib/functions.sh
+. $IPKG_INSTROOT/lib/functions.sh                                                                                                                                                                                                                                      [640/959]
 . $IPKG_INSTROOT/lib/functions/network.sh
+
+check_offline(){
+  result="0"
+  network_is_up "wan" || network_is_up "modem" && {
+    result="1"
+  }
+    [ "$result" = "0" ] && {
+      uci del_list dhcp.@dnsmasq[0].address='/ideascube/192.168.1.1'
+      uci add_list dhcp.@dnsmasq[0].address='/#/74.125.224.72'
+      uci commit dhcp
+      /etc/init.d/dnsmasq reload
+    }
+  }
+check_offline
 
 [ "$ACTION" = ifup ] || exit 0
 
 /etc/init.d/dnsmasq start
+
+[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" -o "$INTERFACE" = "modem" ] && {
+  uci del_list dhcp.@dnsmasq[0].address='/#/74.125.224.72'
+  uci add_list dhcp.@dnsmasq[0].address='/ideascube/192.168.1.1'
+  uci commit dhcp
+  /etc/init.d/dnsmasq reload
+}
