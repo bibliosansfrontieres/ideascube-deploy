@@ -27,7 +27,7 @@
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
     name: traefik
-    image: bibliosansfrontieres/traefik
+    image: bibliosansfrontieres/traefik-i386
     published_ports:
       - 8080:8080
       - 80:80
@@ -71,7 +71,7 @@
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
     name: nginx
-    image: bibliosansfrontieres/nginx:i386
+    image: bibliosansfrontieres/nginx-i386
     published_ports: 8000:80
     restart_policy: always
     state: started
