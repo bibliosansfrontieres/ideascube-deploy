@@ -90,7 +90,7 @@ curl -sfLo /var/lib/ansible/local/device_configuration.json https://github.com/b
 
 cd $ANSIBLECAP_PATH
 
-echo "$ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @device_configuration.json $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @device_configuration.json $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
-$ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@device_configuration.json" $TAGS
+$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@device_configuration.json" $TAGS
