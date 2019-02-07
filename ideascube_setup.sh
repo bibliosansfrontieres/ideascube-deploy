@@ -69,6 +69,10 @@ do
                 "containers")
                     TAGS="--tags pull_container"
                 ;;
+
+                "content")
+                    TAGS="--tags update_content"
+                ;;
             esac
 
         shift
