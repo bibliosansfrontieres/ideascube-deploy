@@ -69,10 +69,6 @@ do
                 "containers")
                     TAGS="--tags pull_container"
                 ;;
-
-                "content")
-                    TAGS="--tags import_ideascube_content,import_kolibri_content"
-                ;;
             esac
 
         shift
