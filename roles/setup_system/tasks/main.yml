@@ -108,3 +108,4 @@
 
 - name: Send this file over the central_server
   raw: cat /etc/firstStart.csv | ssh {{ central_server }} "cat >> ./ansible/UUID/firstStart.csv"
+  when: got_the_key.changed == True
