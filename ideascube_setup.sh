@@ -71,7 +71,7 @@ do
                 ;;
 
                 "content")
-                    TAGS="--tags import_ideascube_content"
+                    TAGS="--tags update_content"
                 ;;
             esac
 
