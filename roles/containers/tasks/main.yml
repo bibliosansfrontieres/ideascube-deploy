@@ -59,9 +59,11 @@
     state: started
     pull: yes
     labels: "traefik.frontend.rule=Host:{{ containers[0].name }}.{{project_type}}"
+    entrypoint: "uwsgi --ini /tmp/ideascube.ini --logto /var/log/uwsgi/ideascube.log"
     volumes:
       - /media/hdd/ideascube:/var/ideascube
       - /media/hdd/ideascube:/var/cache/ideascube
+      - /media/hdd/log/uwsgi/:/var/log/uwsgi/
       - /media/hdd/config-files/uwsgi/ideascube.ini:/tmp/ideascube.ini
       - idc:/IDCsocket
   tags:
