@@ -46,6 +46,7 @@
     - avahi-utils
     - software-properties-common
     - ca-certificates
+    - sqlite3
   tags:
     - packages
 
