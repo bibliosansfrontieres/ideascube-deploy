@@ -13,5 +13,9 @@
     group: root
     mode: 0644
 
-- name: Enable mounts
-  command: systemctl enable media-hdd.mount
+- name: Enable balena service
+  systemd:
+    name: media-hdd.mount
+    state: started
+    enabled: yes
+    daemon_reload: yes
