@@ -169,6 +169,10 @@
     {
       "name": "kiwix",
       "image_id": "bibliosansfrontieres/kiwix-i386"
+    },
+    {
+      "name": "hugo",
+      "image_id": "bibliosansfrontieres/hugo-i386"
     }
   ]
 }
