@@ -90,6 +90,11 @@
     backup: yes
   notify: update timezone
 
+- name: Check if ssh key is present
+  stat: path=/root/.ssh/{{full_device_name}}.pub
+  register: ssh_key
+  tags: ssh_config
+
 - include: storage.yml
   tags: storage
 
@@ -98,6 +103,7 @@
 
 - include: ssh_config.yml
   tags: ssh_config
+  when: ssh_key.stat.exists == False
 
 - include: ansible.yml
   tags: install_ansible
