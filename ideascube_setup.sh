@@ -4,6 +4,7 @@ ANSIBLECAP_PATH="/var/lib/ansible/local"
 GIT_REPO_URL="https://github.com/bibliosansfrontieres/ideascube-deploy.git"
 ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
+TAGS=""
 BRANCH="master"
 GIT_RELEASE_TAG="v1.1.2"
 
@@ -59,9 +60,37 @@ function clone_ansiblecube()
 echo "Checking file access" >> /var/log/ansible-pull.log
 [ $? -ne 0 ] && echo "No space left to write logs or permission problem, exiting." && exit 1
 
+while [[ $# -gt 0 ]]
+do
+    case $1 in
+        -u|--update)
+
+            case $2 in
+                "containers")
+                    TAGS="--tags pull_container"
+                ;;
+
+                "content")
+                    TAGS="--tags update_content"
+                ;;
+            esac
+
+        shift
+        ;;
+
+        *)
+            help
+        ;;
+    esac
+    shift
+done
+
+echo -n "[+] Retrieve device configuration"
+curl -sfLo /etc/ansible/facts.d/device_configuration.json https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/device.json
+
 cd $ANSIBLECAP_PATH
 
-echo "$ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @device.json" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "$ANSIBLE_BIN --purge --force -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @/etc/ansible/facts.d/device_configuration.json $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
-$ANSIBLE_BIN -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@device.json"
+$ANSIBLE_BIN --purge --force -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.json" $TAGS

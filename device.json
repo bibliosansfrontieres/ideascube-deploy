@@ -4,7 +4,7 @@
   "containers": [
     {
       "name": "ideascube",
-      "image_id": "bibliosansfrontieres/ideascube:i386",
+      "image_id": "bibliosansfrontieres/ideascube-i386:0.37.7",
       "data_source": "",
       "content": [
         {
@@ -163,12 +163,16 @@
     },
     {
       "name": "kolibri",
-      "image_id": "bibliosansfrontieres/kolibri:i386",
+      "image_id": "bibliosansfrontieres/kolibri-i386:0.11.1",
       "channel_id": ["en"]
     },
     {
       "name": "kiwix",
-      "image_id": "bibliosansfrontieres/kiwix:i386"
+      "image_id": "bibliosansfrontieres/kiwix-i386"
+    },
+    {
+      "name": "hugo",
+      "image_id": "bibliosansfrontieres/hugo-i386"
     }
   ]
 }

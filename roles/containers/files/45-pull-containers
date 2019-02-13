@@ -1,0 +1,10 @@
+#!/bin/sh
+
+. $IPKG_INSTROOT/lib/functions.sh                                                                                                                                                                                                                                      [640/959]
+. $IPKG_INSTROOT/lib/functions/network.sh
+
+[ "$ACTION" = ifup ] || exit 0
+
+[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" -o "$INTERFACE" = "modem" ] && {
+  curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash -s -- --update containers
+}

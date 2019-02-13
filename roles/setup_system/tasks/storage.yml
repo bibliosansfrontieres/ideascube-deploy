@@ -5,10 +5,17 @@
     state: directory
     mode: 0755
 
-- name: Mount /dev/sda1
-  mount:
-    name: /media/hdd/
-    src: /dev/sda1
-    fstype: ext4
-    state: mounted
-    opts: noatime,nofail
+- name: Copy mount units to systemd folder
+  copy:
+    src: media-hdd.mount
+    dest: /etc/systemd/system/media-hdd.mount
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable balena service
+  systemd:
+    name: media-hdd.mount
+    state: started
+    enabled: yes
+    daemon_reload: yes

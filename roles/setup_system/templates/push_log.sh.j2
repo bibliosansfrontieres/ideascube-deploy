@@ -1,0 +1,15 @@
+#!/bin/sh
+
+. $IPKG_INSTROOT/lib/functions.sh                                                                                                                                                                                                                                      [640/959]
+. $IPKG_INSTROOT/lib/functions/network.sh
+
+[ "$ACTION" = ifup ] || exit 0
+
+[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" -o "$INTERFACE" = "modem" ] && {
+  /usr/local/bin/hdw_info.sh
+  dpkg -l > /var/log/apt/dpkg.list
+  pip freeze > /var/log/pip.freeze
+  iptables-save > /var/log/iptables.rules
+  sqlite3 /media/hdd/ideascube/main/default.sqlite "select id,title from mediacenter_document" | awk -F'|' '{print "\""$1"\": " $2}' > /media/hdd/log/{{ full_device_name }}_ideascube_doc_mapping.yaml
+  rsync -azP /var/log/kern.log /var/log/messages /var/log/syslog* /var/log/ansible-pull.log /var/log/ansible-pull.log* /var/log/apt/dpkg.list* /var/log/pip.freeze* /var/log/iptables.rules /media/hdd/log/* {{ central_server }}:/ansible/logs/{{ full_device_name }}/
+}

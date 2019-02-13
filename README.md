@@ -1,5 +1,22 @@
-# AnsibleCube
+# Ideascube deploy
 
-AnsibleCube aim to automatically deploy the [Ideascube plateform](http://github.com/ideascube/ideascube/) and download several types of content \(ZIM files, Khan Academy videos, Ideascube packages\).
+This set of roles and tasks hack and configure a CMAL device with belena-engine (Moby-based container engine) and pull Docker images like Ideascube, Kiwix, Kolibri, traefik, etc.
 
-Head to [AnsibleCube handbook](http://ansiblecube.doc.bibliosansfrontieres.org) for more setup & configuration details
+
+## Initialization
+
+```
+curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash
+```
+
+## Update Docker images
+
+```
+curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash -s -- --update containers
+```
+
+## Update ideascube content
+
+```
+curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash -s -- --update content
+```
