@@ -10,6 +10,7 @@
     - config-files/nginx
     - config-files/uwsgi
     - ideascube/main
+    - hugo/source
 
 - name: Copy configuration files
   copy:
@@ -117,3 +118,20 @@
     volumes: "/media/hdd/ideascube/kiwix:/var/ideascube/kiwix"
   tags:
     - pull_container
+
+- name: Pull Hugo from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: "{{ containers[3].name }}"
+    image: "{{ containers[3].image_id }}"
+    published_ports: 1313:1313
+    restart_policy: always
+    state: started
+    pull: yes
+    labels: "traefik.frontend.rule=Host:{{ containers[3].name }}.{{project_type}}"
+    volumes: "/media/hdd/hugo/source:/hugo"
+    env:
+      HUGO_BASE_URL: "http://{{ containers[3].name }}.{{project_type}}"
+  tags:
+    - pull_container
+  when: containers[3] is defined
