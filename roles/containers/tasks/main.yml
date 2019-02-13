@@ -134,3 +134,4 @@
       HUGO_BASE_URL: "http://{{ containers[3].name }}.{{project_type}}"
   tags:
     - pull_container
+  when: containers[3] is defined
