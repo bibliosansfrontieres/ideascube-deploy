@@ -6,7 +6,7 @@ ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="master"
-GIT_RELEASE_TAG="1.2"
+GIT_RELEASE_TAG="develop"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
@@ -32,7 +32,7 @@ function install_ansible()
     echo 'Done.'
 
     echo -n "[+] Install ansible... "
-    apt-get install --quiet --quiet -y software-properties-common git lsb-release
+    apt-get install --quiet --quiet -y software-properties-common git lsb-release jq
     apt-add-repository --yes --update ppa:ansible/ansible
     apt-get install --quiet --quiet -y ansible
     echo 'Done.'
@@ -78,6 +78,19 @@ do
         shift
         ;;
 
+        -n|--name)
+
+            if [ -z "$2" ]
+            then
+                echo -e "\n\t[+] ERROR\n\t--name : Missing device name\n"
+
+                exit 0;
+            fi
+            PROJECT_NAME=$2
+
+        shift
+        ;;
+
         *)
             help
         ;;
@@ -86,11 +99,11 @@ do
 done
 
 echo -n "[+] Retrieve device configuration"
-curl -sfLo /etc/ansible/facts.d/device_configuration.json https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/device.json
+curl -vs http://10.10.9.38:1337/devices?project_name=$PROJECT_NAME |jq ".[]" > /var/lib/ansible/local/device_configuration.json
 
 cd $ANSIBLECAP_PATH
 
-echo "$ANSIBLE_BIN --purge --force -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @/etc/ansible/facts.d/device_configuration.json $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @device_configuration.json $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
-$ANSIBLE_BIN --purge --force -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.json" $TAGS
+$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@device_configuration.json" $TAGS
