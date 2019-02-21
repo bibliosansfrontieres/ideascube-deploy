@@ -4,7 +4,7 @@
   block:
     - mount:
         name: /media/hdd/ideascube-builded
-        src: //{{ local_cache_server }}/srv/preprod_images/{{project_name}}/ideascube/{{process_id}}/
+        src: //{{ local_cache_server }}/srv/others/preprod_images/{{project_name}}/ideascube/{{process_id}}/
         fstype: cifs
         opts: guest
         state: mounted
