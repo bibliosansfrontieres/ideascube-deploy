@@ -122,6 +122,5 @@
         uuid: "{{ansible_product_uuid}}"
         private_ip: "{{ansible_default_ipv4.address}}"
         macaddress: "{{ansible_default_ipv4.macaddress}}"
-        public_ip:
         name: "{{full_device_name}}"
     body_format: json
