@@ -1,0 +1,36 @@
+---
+
+- name: Initialize ideascube database & collectstatic
+  command: balena-engine exec {{ containers[0].name }} ideascube {{item}}
+  with_items:
+    - "migrate --database=default"
+    - "migrate --database=transient"
+    - "collectstatic --noinput"
+
+- name: Install Ideascube catalogs
+  command: balena-engine exec {{ containers[0].name }} ideascube catalog remotes add "{{ item.name }}" "{{ item.description }}" "{{ item.url }}"
+  with_items:
+  - name: "Kiwix"
+    description: "Kiwix ZIM content"
+    url: http://catalog.ideascube.org/kiwix.yml
+  - name: "StaticSites"
+    description: "Static sites"
+    url: http://catalog.ideascube.org/static-sites.yml
+  - name: "OSMybon"
+    description: "Experimental OSM catalog"
+    url: http://catalog.ideascube.org/osmaps.yml
+  - name: "Omeka"
+    description: "Omeka packages"
+    url: http://catalog.ideascube.org/omeka.yml
+
+- name: Update ideascube catalog cache before downloading
+  command: balena-engine exec {{ containers[0].name }} ideascube catalog cache update
+
+- name: Install, upgrade or remove a package present in device.json
+  command: "{% if 'present' in item.status %}balena-engine exec {{ containers[0].name }} ideascube catalog install {{ item.name }}
+    {% elif 'latest' in item.status %}balena-engine exec {{ containers[0].name }} ideascube catalog update {{ item.name }}
+    {% elif 'absent' in item.status %}balena-engine exec {{ containers[0].name }} ideascube catalog remove {{ item.name }}
+    {% elif 'reinstall' in item.status %}balena-engine exec {{ containers[0].name }} ideascube catalog reinstall {{ item.name }}
+    {% else %}echo '[+] nothing to do'{% endif %}"
+  with_items: '{{ containers[0].content }}'
+  notify: Restart Kiwix
