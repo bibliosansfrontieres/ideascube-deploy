@@ -18,3 +18,5 @@
     - mount:
         name: /media/hdd/ideascube-builded
         state: absent
+  tags:
+   - update_content

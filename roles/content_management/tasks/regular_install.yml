@@ -34,5 +34,3 @@
     {% else %}echo '[+] nothing to do'{% endif %}"
   with_items: '{{ containers[0].content }}'
   notify: Restart Kiwix
-  tags:
-   - update_content
