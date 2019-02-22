@@ -49,8 +49,8 @@
 - name: Pull ideascube from repository and start it
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
-    name: "{{ containers[0].name }}"
-    image: "{{ containers[0].image_id }}"
+    name: "{{ containers[ideascube_index].name }}"
+    image: "{{ containers[ideascube_index].image_id }}"
     env:
       IDEASCUBE_ID: "idc"
       DOMAIN: "{{project_type}}"
@@ -59,7 +59,7 @@
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[0].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[ideascube_index].name }}.{{project_type}}"
     entrypoint: "uwsgi --ini /tmp/ideascube.ini --logto /var/log/uwsgi/ideascube.log"
     volumes:
       - /media/hdd/ideascube:/var/ideascube
@@ -94,13 +94,13 @@
 - name: Pull Kolibri from repository and start it
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
-    name: "{{ containers[1].name }}"
-    image: "{{ containers[1].image_id }}"
+    name: "{{ containers[kolibri_index].name }}"
+    image: "{{ containers[kolibri_index].image_id }}"
     published_ports: 5000:8080
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[1].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[kolibri_index].name }}.{{project_type}}"
     volumes: "/media/hdd/kolibri:/root/.kolibri/"
   tags:
     - pull_container
@@ -108,13 +108,13 @@
 - name: Pull Kiwix from repository and start it
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
-    name: "{{ containers[2].name }}"
-    image: "{{ containers[2].image_id }}"
+    name: "{{ containers[kolibri_index].name }}"
+    image: "{{ containers[kolibri_index].image_id }}"
     published_ports: 3000:3000
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[2].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[kolibri_index].name }}.{{project_type}}"
     volumes: "/media/hdd/ideascube/kiwix:/var/ideascube/kiwix"
   tags:
     - pull_container
@@ -122,16 +122,16 @@
 - name: Pull Hugo from repository and start it
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
-    name: "{{ containers[3].name }}"
-    image: "{{ containers[3].image_id }}"
+    name: "{{ containers[hugo_index].name }}"
+    image: "{{ containers[hugo_index].image_id }}"
     published_ports: 1313:1313
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[3].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[hugo_index].name }}.{{project_type}}"
     volumes: "/media/hdd/hugo/source:/hugo"
     env:
-      HUGO_BASE_URL: "http://{{ containers[3].name }}.{{project_type}}"
+      HUGO_BASE_URL: "http://{{ containers[hugo_index].name }}.{{project_type}}"
   tags:
     - pull_container
-  when: containers[3] is defined
+  when: containers[hugo_index] is defined
