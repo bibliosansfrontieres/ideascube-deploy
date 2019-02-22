@@ -6,7 +6,7 @@ This set of roles and tasks hack and configure a CMAL device with belena-engine 
 ## Initialization
 
 ```
-curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash
+curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash -s -- --name idc-fra-name
 ```
 
 ## Update Docker images
