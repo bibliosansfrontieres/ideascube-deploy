@@ -8,7 +8,7 @@
         fstype: cifs
         opts: guest
         state: mounted
-    - command: rsync -a /media/hdd/ideascube-builded/{{ item}}/ ideascube
+    - command: rsync -a /media/hdd/ideascube-builded/{{ item}}/ /media/hdd/ideascube/
       with_items:
         - var_cache_idc
         - var_idc
