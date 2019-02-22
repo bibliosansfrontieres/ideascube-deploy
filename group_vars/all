@@ -12,3 +12,4 @@ central_server: tincmaster.wan.bsf-intranet.org
 filer_bsf: http://filer.bsf-intranet.org
 local_cache_server: "koombook-doctor.local"
 bsf_gateway: "10.10.9.1"
+ideascube_api_service: "10.10.9.38:1337"
