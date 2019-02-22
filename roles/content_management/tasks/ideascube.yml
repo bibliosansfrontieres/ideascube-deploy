@@ -4,14 +4,14 @@
   block:
     - mount:
         name: /media/hdd/ideascube-builded
-        src: //{{ local_cache_server }}/srv/others/preprod_images/{{project_name}}/ideascube/{{process_id}}/
+        src: //{{ local_cache_server }}/ideascube_data/{{project_name}}/ideascube/{{process_id}}/
         fstype: cifs
         opts: guest
         state: mounted
     - command: rsync -a /media/hdd/ideascube-builded/{{ item}}/ ideascube
       with_items:
-        - ideascube_var
-        - ideascube_cache
+        - var_cache_idc
+        - var_idc
   rescue:
     - include: regular_install.yml
   always:
