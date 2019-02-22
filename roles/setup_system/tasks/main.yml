@@ -47,6 +47,7 @@
     - software-properties-common
     - ca-certificates
     - sqlite3
+    - cifs-utils
   tags:
     - packages
 
@@ -112,10 +113,15 @@
 - include: logs.yml
   tags: logs
 
-- name: Write all the variables in /etc/firstStart.csv
-  copy: content="id,{{ ansible_date_time["date"] }},{{ ansible_date_time["time"] }},{{ full_device_name }},{{ ansible_machine_id }},{{ ansible_default_ipv4["macaddress"]  | default (omit) }},{{ ansible_default_ipv4["address"] | default (omit) }}\n" dest=/etc/firstStart.csv
-  when: firststart.stat.exists == False or firststart is undefined
-
-- name: Send this file over the central_server
-  raw: cat /etc/firstStart.csv | ssh {{ central_server }} "cat >> ./ansible/UUID/firstStart.csv"
-  when: got_the_key.changed == True
+- name: POST devices info
+  uri:
+    url:  http://{{ideascube_api_service}}/devices
+    method: POST
+    body:
+        project: "{{id}}"
+        serial: "{{ansible_product_serial}}"
+        uuid: "{{ansible_product_uuid}}"
+        private_ip: "{{ansible_default_ipv4.address}}"
+        macaddress: "{{ansible_default_ipv4.macaddress}}"
+        name: "{{full_device_name}}"
+    body_format: json
