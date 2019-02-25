@@ -1,36 +1,33 @@
 ---
-- name: Mount CIFS Share
-  mount:
-    name: /media/hdd/kolibri/kawax
-    src: //{{ local_cache_server }}/kolibri
-    fstype: cifs
-    opts: guest
-    state: mounted
-  when: cache_machine.state|default(omit) == "present"
+- name: Try to install Kolibri content from local cache server
+  block:
+    - mount:
+        name: /media/hdd/kolibri/kawax
+        src: //{{ local_cache_server }}/kolibri
+        fstype: cifs
+        opts: guest
+        state: mounted
 
-- name: Restart container to refresh cifs share
-  docker_container:
-    docker_host: unix://var/run/balena-engine.sock
-    name: "{{ containers[kolibri_index].name }}"
-    restart : yes
-  when: cache_machine.state|default(omit) == "present"
+    - name: Restart container to refresh cifs share
+      docker_container:
+        docker_host: unix://var/run/balena-engine.sock
+        name: "{{ containers[kolibri_index].name }}"
+        restart : yes
 
-- name: Import channels and content from local cache server
-  raw: >
-    {{ kolibri_bin }} manage importchannel disk {{ language[item] }} /root/.kolibri/kawax/khan/{{ item }}/
-    && {{ kolibri_bin }} manage importcontent disk {{ language[item] }} /root/.kolibri/kawax/khan/{{ item }}/
-  with_items: "{{ containers[kolibri_index].channel_id | default('fr') }}"
-  when: cache_machine.state|default(omit) == "present"
+    - name: Import channels and content from local cache server
+      raw: >
+        {{ kolibri_bin }} manage importchannel disk {{ language[item] }} /root/.kolibri/kawax/khan/{{ item }}/
+        && {{ kolibri_bin }} manage importcontent disk {{ language[item] }} /root/.kolibri/kawax/khan/{{ item }}/
+      with_items: "{{ containers[kolibri_index].channel_id | default('fr') }}"
 
-- name: Import channels and content from Internet
-  raw: >
-    {{ kolibri_bin }} manage importchannel -- network {{ language[item] }}
-    && {{ kolibri_bin }} manage importcontent -- network {{ language[item] }}
-  with_items: "{{ containers[kolibri_index].channel_id | default('fr') }}"
-  when: cache_machine.state is undefined
+  rescue:
+    - name: Import channels and content from Internet
+      raw: >
+        {{ kolibri_bin }} manage importchannel -- network {{ language[item] }}
+        && {{ kolibri_bin }} manage importcontent -- network {{ language[item] }}
+      with_items: "{{ containers[kolibri_index].channel_id | default('fr') }}"
 
-- name: Unmounting share
-  mount:
-    name: /media/hdd/kolibri/kawax
-    state: absent
-  when: cache_machine.state|default(omit) == "present"
+  always:
+    - mount:
+        name: /media/hdd/kolibri/kawax
+        state: absent
