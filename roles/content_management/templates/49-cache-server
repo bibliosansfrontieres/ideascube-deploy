@@ -1,0 +1,21 @@
+#!/bin/sh
+
+. $IPKG_INSTROOT/lib/functions.sh                                                                                                                                                                                                                                      [640/959]
+. $IPKG_INSTROOT/lib/functions/network.sh
+
+[ "$ACTION" = ifup ] || exit 0
+
+[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" -o "$INTERFACE" = "modem" ] && {
+  if [[ `ping -q -c 2 {{ local_cache_server }}` ]]
+  then
+
+    kb_doctor_ip=`avahi-resolve-host-name {{ local_cache_server }} | awk -F " " '{print $2}'`
+
+    if [ -z "$(grep "{{ local_cache_server }}" /etc/hosts)" ]
+    then
+        echo "$kb_doctor_ip" {{ local_cache_server }} download.kiwix.org packages.ideascube.org >> /etc/hosts
+    fi
+  else
+    sed -i "/{{ local_cache_server }}/d" /etc/hosts
+  fi
+}

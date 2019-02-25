@@ -67,10 +67,6 @@
     src: hosts.j2
     dest: /etc/hosts
 
-# - name: Add domain name entry in /etc/hosts if a cache machine is around
-#   command: /etc/NetworkManager/dispatcher.d/02koombook-doctor {{ lan_interface }} up
-#   when: cache_machine.state|default(omit) ==  "present"
-
 - name: Switch to FDN DNS server
   command: uci set dhcp.@dnsmasq[0].server='80.67.169.12'
 
