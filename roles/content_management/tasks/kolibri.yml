@@ -1,15 +1,4 @@
 ---
-
-- name: Show cache machine state
-  debug:
-    msg: "Cache machine is {{cache_machine}}"
-
-- name: Install cifs-utils
-  apt:
-    name: cifs-utils
-    state: present
-  when: cache_machine.state|default(omit) == "present"
-
 - name: Mount CIFS Share
   mount:
     name: /media/hdd/kolibri/kawax
