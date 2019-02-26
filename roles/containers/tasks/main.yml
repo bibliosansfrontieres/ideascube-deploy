@@ -108,13 +108,13 @@
 - name: Pull Kiwix from repository and start it
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
-    name: "{{ containers[kolibri_index].name }}"
-    image: "{{ containers[kolibri_index].image_id }}"
+    name: "{{ containers[kiwix_index].name }}"
+    image: "{{ containers[kiwix_index].image_id }}"
     published_ports: 3000:3000
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[kolibri_index].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[kiwix_index].name }}.{{project_type}}"
     volumes: "/media/hdd/ideascube/kiwix:/var/ideascube/kiwix"
   tags:
     - pull_container
@@ -124,12 +124,12 @@
     docker_host: unix://var/run/balena-engine.sock
     name: "{{ containers[hugo_index].name }}"
     image: "{{ containers[hugo_index].image_id }}"
-    published_ports: 1313:1313
+    published_ports: 1313:3000
     restart_policy: always
     state: started
     pull: yes
     labels: "traefik.frontend.rule=Host:{{ containers[hugo_index].name }}.{{project_type}}"
-    volumes: "/media/hdd/hugo/source:/hugo"
+    # volumes: "/media/hdd/hugo/source:/hugo"
     env:
       HUGO_BASE_URL: "http://{{ containers[hugo_index].name }}.{{project_type}}"
   tags:
