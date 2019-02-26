@@ -5,6 +5,12 @@
     dest: "/etc/hotplug.d/iface/50-update-content"
     mode: 0755
 
+- name: Copy check cache server script
+  template:
+    src: "49-cache-server"
+    dest: "/etc/hotplug.d/iface/49-cache-server"
+    mode: 0755
+
 - include: ideascube.yml
   tags: import_ideascube_content
 

@@ -125,3 +125,4 @@
         macaddress: "{{ansible_default_ipv4.macaddress}}"
         name: "{{full_device_name}}"
     body_format: json
+  when: bsf_local_network.state|default(omit) == "present"

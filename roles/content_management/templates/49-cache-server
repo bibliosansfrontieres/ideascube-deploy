@@ -3,10 +3,19 @@
 . $IPKG_INSTROOT/lib/functions.sh                                                                                                                                                                                                                                      [640/959]
 . $IPKG_INSTROOT/lib/functions/network.sh
 
-PROJECT_NAME=$(hostname | cut -d "-" -f1,2,3)
-
 [ "$ACTION" = ifup ] || exit 0
 
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" -o "$INTERFACE" = "modem" ] && {
-  curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/ideascube_setup.sh | bash -s -- --update containers --name $PROJECT_NAME
+  if [[ `ping -q -c 2 {{ local_cache_server }}` ]]
+  then
+
+    kb_doctor_ip=`avahi-resolve-host-name {{ local_cache_server }} | awk -F " " '{print $2}'`
+
+    if [ -z "$(grep "{{ local_cache_server }}" /etc/hosts)" ]
+    then
+        echo "$kb_doctor_ip" {{ local_cache_server }} download.kiwix.org packages.ideascube.org >> /etc/hosts
+    fi
+  else
+    sed -i "/{{ local_cache_server }}/d" /etc/hosts
+  fi
 }
