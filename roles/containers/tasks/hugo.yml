@@ -1,0 +1,16 @@
+- name: Pull Hugo from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: "{{ containers[hugo_index].name }}"
+    image: "{{ containers[hugo_index].image_id }}"
+    published_ports: 1313:3000
+    restart_policy: always
+    state: started
+    pull: yes
+    labels: "traefik.frontend.rule=Host:{{ containers[hugo_index].name }}.{{project_type}}"
+    # volumes: "/media/hdd/hugo/source:/hugo"
+    env:
+      HUGO_BASE_URL: "http://{{ containers[hugo_index].name }}.{{project_type}}"
+  tags:
+    - pull_container
+  when: containers[hugo_index] is defined

@@ -1,0 +1,13 @@
+- name: Pull Kolibri from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: "{{ containers[kolibri_index].name }}"
+    image: "{{ containers[kolibri_index].image_id }}"
+    published_ports: 5000:8080
+    restart_policy: always
+    state: started
+    pull: yes
+    labels: "traefik.frontend.rule=Host:{{ containers[kolibri_index].name }}.{{project_type}}"
+    volumes: "/media/hdd/kolibri:/root/.kolibri/"
+  tags:
+    - pull_container

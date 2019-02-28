@@ -13,7 +13,7 @@
         - var_cache_idc
         - var_idc
   rescue:
-    - include: regular_install.yml
+    - include: ideascube_regular_install.yml
   always:
     - mount:
         name: /media/hdd/ideascube-builded
