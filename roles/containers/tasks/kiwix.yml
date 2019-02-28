@@ -1,0 +1,13 @@
+- name: Pull Kiwix from repository and start it
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: "{{ containers[kiwix_index].name }}"
+    image: "{{ containers[kiwix_index].image_id }}"
+    published_ports: 3000:3000
+    restart_policy: always
+    state: started
+    pull: yes
+    labels: "traefik.frontend.rule=Host:{{ containers[kiwix_index].name }}.{{project_type}}"
+    volumes: "/media/hdd/ideascube/kiwix:/var/ideascube/kiwix"
+  tags:
+    - pull_container
