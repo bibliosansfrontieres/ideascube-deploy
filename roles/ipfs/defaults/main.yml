@@ -1,0 +1,22 @@
+ipfs_gateway_port: 8080
+ipfs_api_port: 5001
+ipfs_swarm_port: 4001
+
+ipfs_schedule_ipns_publish: []
+ipfs_pin_content: [
+QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG
+]
+ipfs_announce: "/ip4/{{ inventory_hostname }}/4001"
+
+ipfs_import_keys:
+  - { src: "ipfs_keys/bsf-test-retrieve-file", name: bsf-test-retrieve-file }
+
+ipfs_config:
+  - { key: Addresses.API, value: "/ip4/0.0.0.0/tcp/{{ipfs_api_port}}" }
+  - { key: Addresses.Gateway, value: "/ip4/0.0.0.0/tcp/{{ipfs_gateway_port}}" }
+  - { key: Addresses.Swarm, value: "\"[\\\"/ip4/0.0.0.0/tcp/{{ ipfs_swarm_port }}\\\"]\"", json: true }
+  - { key: Addresses.Announce, value: "\"[\\\"{{ ipfs_announce }}\\\"]\"", json: true }
+  - { key: Discovery.MDNS.Enabled, value: "false", json: true }
+  - { key: Mounts.FuseAllowOther, value: "true", json: true }
+  - { key: Swarm.ConnMgr.HighWater, value: "20", json: true }
+  - { key: Swarm.ConnMgr.LowWater, value: "10", json: true }

@@ -11,6 +11,7 @@
     - config-files/uwsgi
     - ideascube/main
     - hugo/source
+    - olip
 
 - name: Copy configuration files
   copy:
@@ -31,5 +32,7 @@
 - include: kiwix.yml
 
 - include: kolibri.yml
+
+- include: olip.yml
 
 - include: hugo.yml

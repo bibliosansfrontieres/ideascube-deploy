@@ -1,0 +1,64 @@
+- name: Create core network
+  docker_network:
+    docker_host: unix://var/run/balena-engine.sock
+    name: olipcore
+    driver_options:
+      com.docker.network.bridge.name: brolipcore
+    ipam_options:
+      subnet: "{{olip_core_network.subnet}}"
+      gateway: "{{olip_core_network.gateway}}"
+
+- name: Install docker registry
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: ipfs-registry
+    pull: "{{olip_ipfs_registry_version == 'latest'}}"
+    image: "bibliosansfrontieres/ipfs-registry-i386:{{ olip_ipfs_registry_version }}"
+    restart_policy: always
+    ports:
+    - 6000:5000
+    env:
+      IPFS_GATEWAY: "http://{{ olip_core_network.gateway }}:{{ olip_ipfs_gw_port }}"
+    networks:
+      - name: olipcore
+
+- name: Install API
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: olip-api
+    image: "bibliosansfrontieres/olip-api-i386:{{ olip_api_version }}"
+    restart_policy: always
+    pull: "{{olip_api_version == 'latest'}}"
+    labels: "traefik.frontend.rule=Host:olip.api.{{project_type}}"
+    published_ports:
+      - "{{ olip_api_port }}:5002"
+    networks:
+      - name: olipcore
+    volumes:
+      - /media/hdd/olip/:/data
+      - /var/run/balena-engine.sock:/var/run/balena-engine.sock
+    env:
+      # DOCKER_HOST: "tcp://{{ olip_core_network.gateway }}:2375"
+      DOCKER_HOST: "unix://var/run/balena-engine.sock"
+      HOST_DATA_DIR: /data
+      SQLALCHEMY_DATABASE_URI: sqlite:////data/app.db
+      IPFS_GATEWAY_HOST: "{{ olip_core_network.gateway }}"
+      IPFS_GATEWAY_PORT: "{{ olip_ipfs_api_port }}"
+      DOCKER_REGISTRY_HOST: "{{ olip_core_network.gateway }}:6000"
+      API_BASE_URL: "{{ olip_api_base_url }}"
+      BOX_REPOSITORY_IPN: /ipns/QmbCrQdshCtrX3vzv87LWVZ7X7iCMZ11DTdtqqLqu4A5Dv
+
+- name: Install Dashboard
+  docker_container:
+    docker_host: unix://var/run/balena-engine.sock
+    name: olip-dashboard
+    image: "bibliosansfrontieres/olip-dashboard-i386:{{ olip_dashboard_version }}"
+    restart_policy: always
+    pull: "{{olip_dashboard_version == 'latest'}}"
+    labels: "traefik.frontend.rule=Host:olip.{{project_type}}"
+    published_ports:
+    - "{{ olip_dashboard_port }}:80"
+    networks:
+      - name: olipcore
+    env:
+      API_URL: "{{ olip_api_base_url }}"

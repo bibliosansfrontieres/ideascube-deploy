@@ -1,0 +1,11 @@
+[Unit]
+Description=IPFS daemon
+After=network.target
+
+[Service]
+Environment="IPFS_PATH=/media/hdd/.ipfs"
+ExecStart=/usr/local/bin/ipfs daemon --mount
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

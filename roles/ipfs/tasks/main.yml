@@ -1,0 +1,100 @@
+---
+- name: download archives...
+  get_url:
+    url: https://dist.ipfs.io/go-ipfs/v0.4.18/go-ipfs_v0.4.18_linux-386.tar.gz
+    dest: /tmp/go-ipfs_v0.4.18_linux-386.tar.gz
+    mode: 0644
+
+- name: make version specific install directories
+  file:
+    path: /usr/local/ipfs-4.18/go-ipfs
+    state: directory
+    mode: 0755
+
+- name: unarchive ipfs
+  unarchive:
+    src: /tmp/go-ipfs_v0.4.18_linux-386.tar.gz
+    dest: /usr/local/ipfs-4.18
+    remote_src: yes
+
+- name: links...
+  file:
+    src: '/usr/local/ipfs-4.18/go-ipfs/ipfs'
+    dest: '/usr/local/bin/ipfs'
+    state: link
+
+- name: Create ipfs configuration directory
+  file:
+    path: /media/hdd/.ipfs
+    state: directory
+    mode: 0755
+
+- name: export ipfs path configuration folder
+  lineinfile:
+    dest: /root/.bashrc
+    line: export IPFS_PATH=/media/hdd/.ipfs
+
+- name: Create ipfs repo
+  shell: export IPFS_PATH=/media/hdd/.ipfs && ipfs init
+  ignore_errors: yes
+
+- name: Set ipfs config
+  shell: export IPFS_PATH=/media/hdd/.ipfs && /usr/local/bin/ipfs config "{{ item.key }}" "{{ item.value|quote }}"
+  with_items: "{{ ipfs_config }}"
+  when: item.json is not defined or item.json == false
+
+- name: Set ipfs config (json values)
+  shell: export IPFS_PATH=/media/hdd/.ipfs && /usr/local/bin/ipfs config --json "{{ item.key }}" "{{ item.value }}"
+  with_items: "{{ ipfs_config }}"
+  when: item.json is defined and item.json == true
+
+- name: Creates ipfs mount points
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0777
+  with_items:
+  - "/ipfs"
+  - "/ipns"
+
+- name: Install fuse
+  package:
+    name: fuse
+    state: present
+
+- name: Install systemd service
+  template:
+    src: ipfs.service.j2
+    dest: /lib/systemd/system/ipfs.service
+  notify:
+  - reload systemd
+  - restart ipfs
+
+- name: Start and enable service
+  service:
+    name: ipfs
+    enabled: yes
+    state: started
+
+- name: Import private keys
+  copy:
+    src: "{{ item.src }}"
+    dest: "/media/hdd/.ipfs/keystore/{{ item.name }}"
+  with_items: "{{ ipfs_import_keys }}"
+
+- name: Schedule ipns refresh
+  cron:
+    name: "ipns refresh for {{ item.key }}"
+    job: "export IPFS_PATH=/media/hdd/.ipfs && /usr/local/bin/ipfs name publish --key={{ item.key }} {{ item.target }}"
+    hour: "*/8"
+  with_items: "{{ ipfs_schedule_ipns_publish }}"
+
+# - name: Get pinned content
+#   command: "/usr/local/bin/ipfs pin ls"
+#   register: ipfs_pinned_content_string
+#   changed_when: false
+#
+# - name: Pin content
+#   command: "/usr/local/bin/ipfs pin add {{ item }}"
+#   when: not (ipfs_pinned_content_string.stdout | search(item))
+#   with_items: "{{ ipfs_pin_content }}"
