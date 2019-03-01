@@ -19,11 +19,17 @@
     dest: "{{ item.dest }}"
   with_items:
     - { src: 'traefik.toml', dest: '/media/hdd/config-files/traefik/traefik.toml' }
-    - { src: 'default.conf', dest: '/media/hdd/config-files/nginx/default.conf' }
     - { src: 'nginx.conf', dest: '/media/hdd/config-files/nginx/nginx.conf' }
     - { src: 'ideascube.ini', dest: '/media/hdd/config-files/uwsgi/ideascube.ini' }
     - { src: 'uwsgi_params', dest: '/media/hdd/ideascube/'}
     - { src: '45-pull-containers', dest: '/etc/hotplug.d/iface/45-pull-containers'}
+
+- name: Copy configuration templates
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'default.conf.j2', dest: '/media/hdd/config-files/nginx/default.conf' }
 
 - include: traefik.yml
 
