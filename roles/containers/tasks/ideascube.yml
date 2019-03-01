@@ -36,11 +36,12 @@
     restart_policy: always
     state: started
     pull: yes
-    labels: traefik.frontend.rule=Host:"{{project_type}}"
+    labels: traefik.frontend.rule=Host:"{{project_type}},sites.{{project_type}}"
     volumes:
       - /media/hdd/ideascube/static/:/var/ideascube/static/
       - /media/hdd/ideascube/main/media/:/var/ideascube/main/media/
       - /media/hdd/ideascube/mediacenter:/var/ideascube/mediacenter
+      - /media/hdd/ideascube/nginx/:/var/ideascube/nginx/
       - /media/hdd/config-files/nginx/nginx.conf:/etc/nginx/nginx.conf
       - /media/hdd/config-files/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /media/hdd/ideascube/uwsgi_params:/var/ideascube/uwsgi_params
