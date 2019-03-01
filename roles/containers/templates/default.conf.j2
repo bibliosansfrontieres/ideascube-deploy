@@ -5,8 +5,8 @@ upstream ideascube {
 
 # configuration of the server
 server {
-    listen       80  default_server;
-    server_name  _;
+    listen       80;
+    server_name  {{project_type}};
     charset     utf-8;
 
     # max upload size
@@ -34,4 +34,14 @@ server {
         uwsgi_pass  ideascube;
         include     /var/ideascube/uwsgi_params;
     }
+}
+
+server {
+    listen 80;
+
+    server_name sites.{{project_type}};
+
+    charset utf-8;
+
+    root /var/ideascube/nginx/;
 }
