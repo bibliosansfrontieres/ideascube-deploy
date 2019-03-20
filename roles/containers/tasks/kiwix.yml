@@ -9,5 +9,3 @@
     pull: yes
     labels: "traefik.frontend.rule=Host:{{ containers[kiwix_index].name }}.{{project_type}}"
     volumes: "/media/hdd/ideascube/kiwix:/var/ideascube/kiwix"
-  tags:
-    - pull_container

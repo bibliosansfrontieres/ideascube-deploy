@@ -32,13 +32,25 @@
     - { src: 'default.conf.j2', dest: '/media/hdd/config-files/nginx/default.conf' }
 
 - include: traefik.yml
+  tags:
+    - pull_container
 
 - include: ideascube.yml
+  tags:
+    - pull_container
 
 - include: kiwix.yml
+  tags:
+    - pull_container
 
 - include: kolibri.yml
+  tags:
+    - pull_container
 
 - include: olip.yml
+  tags:
+    - pull_container
 
 - include: hugo.yml
+  tags:
+    - pull_container

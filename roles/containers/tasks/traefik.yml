@@ -12,5 +12,3 @@
     volumes:
       - /media/hdd/config-files/traefik/traefik.toml:/etc/traefik/traefik.toml
       - /var/run/balena-engine.sock:/var/run/docker.sock
-  tags:
-    - pull_container

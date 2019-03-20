@@ -11,6 +11,4 @@
     # volumes: "/media/hdd/hugo/source:/hugo"
     env:
       HUGO_BASE_URL: "http://{{ containers[hugo_index].name }}.{{project_type}}"
-  tags:
-    - pull_container
   when: containers[hugo_index] is defined
