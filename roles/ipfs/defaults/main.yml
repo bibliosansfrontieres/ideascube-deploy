@@ -1,7 +1,3 @@
-ipfs_gateway_port: 8080
-ipfs_api_port: 5001
-ipfs_swarm_port: 4001
-
 ipfs_schedule_ipns_publish: []
 ipfs_pin_content: [
 QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG

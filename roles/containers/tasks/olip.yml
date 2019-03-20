@@ -46,6 +46,8 @@
       IPFS_GATEWAY_PORT: "{{ olip_ipfs_api_port }}"
       DOCKER_REGISTRY_HOST: "{{ olip_core_network.gateway }}:6000"
       API_BASE_URL: "{{ olip_api_base_url }}"
+      APPLICATION_ROOT: "{{ olip_external_base_url }}"
+      INTERNAL_HOST_BASE_URL: "{{olip_internal_host_base_url | default(omit)}}"
       BOX_REPOSITORY_IPN: /ipns/QmbCrQdshCtrX3vzv87LWVZ7X7iCMZ11DTdtqqLqu4A5Dv
 
 - name: Install Dashboard
