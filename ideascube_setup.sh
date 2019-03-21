@@ -6,7 +6,7 @@ ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="master"
-GIT_RELEASE_TAG="1.4"
+GIT_RELEASE_TAG="1.4.1"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
@@ -98,11 +98,9 @@ do
     shift
 done
 
-echo -n "[+] Retrieve device configuration if in local network"
-if [[ `ping -q -c 2 10.10.9.23` ]]
-then
-    curl -vs http://10.10.9.38:1337/projects?project_name=$PROJECT_NAME |jq ".[]" > /etc/ansible/facts.d/device_configuration.json
-fi
+echo -n "[+] Retrieve device configuration from API"
+apt-get install --quiet --quiet -y jq
+curl -vs http://10.90.100.254:1337/projects?project_name=$PROJECT_NAME |jq ".[]" > /etc/ansible/facts.d/device_configuration.json
 
 cd $ANSIBLECAP_PATH
 
