@@ -18,6 +18,21 @@
 
 - debug: msg="Tinc mac address {{ tinc_if_mac.stdout }}, name {{device_tinc_name}}"
 
+- name: Create a new interface
+  command: uci set network.tinc='interface'
+
+- name: Assign new interface name
+  command: uci set network.tinc.ifname='{{vpn_name}}'
+
+- name: Use dhcp
+  command: uci set network.tinc.proto='dhcp'
+
+- name: Set mac address
+  command: uci set network.tinc.macaddr='{{ tinc_if_mac.stdout }}'
+
+- name: Commit changes
+  command: uci commit network
+
 - name: insert/update vpn_name configuration in /etc/network/interfaces
   blockinfile:
     block: "{{ lookup('template', 'vpn_interface.j2') }}"
