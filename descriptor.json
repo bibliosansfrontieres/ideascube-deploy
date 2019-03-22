@@ -1,0 +1,57 @@
+{
+  "applications":[
+    {
+      "bundle": "hugo.app",
+      "name": "Mediacenter",
+      "description": "Mediacenter for OLIP",
+      "version": "1.0.0",
+      "picture": "",
+      "containers": [
+        {
+          "image": "ciqc552yu6zf34ilwff7tod4nc5obmk6z4me3n5reyus2hebrpgzvia",
+          "name": "hugo",
+          "expose": 1414
+        }
+      ],
+      "contents": [
+        {
+          "content_id": "test.content",
+          "name": "afile",
+          "download_path": "/ipfs/Qma6moV1boFTUp4xiEh3WRX8WEYpsKbZXWySnsS6HQ65iJ",
+          "destination_path": "path/to/file.pdf",
+          "description": "desc",
+          "endpoint": {
+              "container": "app",
+              "name": "Endpoint name",
+              "url": "/content/url"
+          }
+        }
+      ]
+    },
+    {
+      "name": "testapp2",
+      "bundle": "test.app.2",
+      "description": "Lorem ipsum dolor sit amet, consectetur",
+      "version": "2.0.0",
+      "picture": "===BASE64 ENCODED IMAGE ===",
+      "containers": [
+        {
+          "image": "ciqotfvkmfgsbl5yapj6o23v4xjidl2dsci5apykkp5tsssazw4deuq/armhfbuild/nginx:latest",
+          "name": "app",
+          "expose": 80
+        }
+      ],
+      "authentication": {
+        "grant_types": ["authorization_code", "implicit"],
+        "response_types": ["id_token", "code id_token"],
+        "token_endpoint_auth_method": "client_secret_post"
+      },
+      "search": {
+        "container": "app",
+        "opensearch_url": "/opensearch"
+      }
+    }
+  ],
+  "terms": ["term1", "term2"]
+
+}
