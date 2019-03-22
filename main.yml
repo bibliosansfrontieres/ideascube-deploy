@@ -9,7 +9,6 @@
 
     - setup_system
     - tinc
-    - ipfs
     - balena-engine
     - containers
     - content_management
