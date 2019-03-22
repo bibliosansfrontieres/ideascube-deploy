@@ -2,6 +2,8 @@ ipfs_schedule_ipns_publish: []
 ipfs_pin_content: [
 QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG
 ]
+ipfs_version: 0.4.19
+
 ipfs_announce: "/ip4/{{ inventory_hostname }}/4001"
 
 ipfs_import_keys:
@@ -10,8 +12,8 @@ ipfs_import_keys:
 ipfs_config:
   - { key: Addresses.API, value: "/ip4/0.0.0.0/tcp/{{ipfs_api_port}}" }
   - { key: Addresses.Gateway, value: "/ip4/0.0.0.0/tcp/{{ipfs_gateway_port}}" }
-  - { key: Addresses.Swarm, value: "\"[\\\"/ip4/0.0.0.0/tcp/{{ ipfs_swarm_port }}\\\"]\"", json: true }
-  - { key: Addresses.Announce, value: "\"[\\\"{{ ipfs_announce }}\\\"]\"", json: true }
+  - { key: Addresses.Swarm, value: "\"[\\\"/ip4/0.0.0.0/tcp/{{ ipfs_swarm_port }}\\\",\\\"/ip6/::/tcp/{{ ipfs_swarm_port }}\\\"]\"", json: true }
+  #- { key: Addresses.Announce, value: "\"[\\\"{{ ipfs_announce }}\\\"]\"", json: true }
   - { key: Discovery.MDNS.Enabled, value: "false", json: true }
   - { key: Mounts.FuseAllowOther, value: "true", json: true }
   - { key: Swarm.ConnMgr.HighWater, value: "20", json: true }

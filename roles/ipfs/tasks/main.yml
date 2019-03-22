@@ -1,25 +1,25 @@
 ---
 - name: download archives...
   get_url:
-    url: https://dist.ipfs.io/go-ipfs/v0.4.18/go-ipfs_v0.4.18_linux-386.tar.gz
-    dest: /tmp/go-ipfs_v0.4.18_linux-386.tar.gz
+    url: https://dist.ipfs.io/go-ipfs/v{{ ipfs_version }}/go-ipfs_v{{ ipfs_version }}_linux-386.tar.gz
+    dest: /tmp/go-ipfs_v{{ ipfs_version }}_linux-386.tar.gz
     mode: 0644
 
 - name: make version specific install directories
   file:
-    path: /usr/local/ipfs-4.18/go-ipfs
+    path: /usr/local/ipfs-v{{ ipfs_version }}/go-ipfs
     state: directory
     mode: 0755
 
 - name: unarchive ipfs
   unarchive:
-    src: /tmp/go-ipfs_v0.4.18_linux-386.tar.gz
-    dest: /usr/local/ipfs-4.18
+    src: /tmp/go-ipfs_v{{ ipfs_version }}_linux-386.tar.gz
+    dest: /usr/local/ipfs-v{{ ipfs_version }}
     remote_src: yes
 
 - name: links...
   file:
-    src: '/usr/local/ipfs-4.18/go-ipfs/ipfs'
+    src: '/usr/local/ipfs-v{{ ipfs_version }}/go-ipfs/ipfs'
     dest: '/usr/local/bin/ipfs'
     state: link
 
