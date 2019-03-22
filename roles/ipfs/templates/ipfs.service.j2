@@ -1,6 +1,8 @@
 [Unit]
 Description=IPFS daemon
-After=network.target
+After=firewall
+Wants=network-online.target
+
 
 [Service]
 Environment="IPFS_PATH=/media/hdd/.ipfs"
