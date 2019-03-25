@@ -41,13 +41,13 @@
       DOCKER_HOST: "unix://var/run/balena-engine.sock"
       HOST_DATA_DIR: /data
       SQLALCHEMY_DATABASE_URI: sqlite:////data/app.db
-      IPFS_GATEWAY_HOST: "{{ olip_core_network.gateway }}"
+      IPFS_GATEWAY_HOST: "192.168.100.107"
       IPFS_GATEWAY_PORT: "{{ olip_ipfs_api_port }}"
-      DOCKER_REGISTRY_HOST: "{{ olip_core_network.gateway }}:6000"
+      DOCKER_REGISTRY_HOST: "192.168.100.107:6000"
       API_BASE_URL: "{{ olip_api_base_url }}"
       APPLICATION_ROOT: "{{ olip_external_base_url }}"
       INTERNAL_HOST_BASE_URL: "{{olip_internal_host_base_url | default(omit)}}"
-      BOX_REPOSITORY_IPN: /ipfs/QmVhAa32BFeeoqnD31T9opeWyMGbgKTRsrhz4K3WipQVxi
+      BOX_REPOSITORY_IPN: /ipfs/QmddE881a8JHbkwUVUNC3ZJiGsArDSfvbWZgymSmxi6yF7
 
 - name: Install Dashboard
   docker_container:
