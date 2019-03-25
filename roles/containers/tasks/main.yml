@@ -51,6 +51,6 @@
   tags:
     - pull_container
 
-- include: hugo.yml
-  tags:
-    - pull_container
+# - include: hugo.yml
+#   tags:
+#     - pull_container
