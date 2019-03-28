@@ -4,7 +4,7 @@
     name: traefik
     image: bibliosansfrontieres/traefik-i386
     published_ports:
-      - 8080:8080
+      - 8181:8080
       - 80:80
     restart_policy: always
     state: started

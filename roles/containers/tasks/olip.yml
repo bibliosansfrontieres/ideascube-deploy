@@ -16,7 +16,7 @@
     image: "bibliosansfrontieres/ipfs-registry-i386:{{ olip_ipfs_registry_version }}"
     restart_policy: always
     ports:
-    - 6000:5000
+    - 6500:5000
     env:
       IPFS_GATEWAY: "http://{{ olip_core_network.gateway }}:{{ olip_ipfs_gw_port }}"
     networks:
@@ -35,19 +35,19 @@
     networks:
       - name: olipcore
     volumes:
-      - /media/hdd/olip/:/data
+      - /media/hdd/olip_bdd/:/data
       - /var/run/balena-engine.sock:/var/run/balena-engine.sock
     env:
       DOCKER_HOST: "unix://var/run/balena-engine.sock"
-      HOST_DATA_DIR: /data
+      HOST_DATA_DIR: /media/hdd/olip_data_dir/
       SQLALCHEMY_DATABASE_URI: sqlite:////data/app.db
-      IPFS_GATEWAY_HOST: "192.168.100.107"
+      IPFS_GATEWAY_HOST: "{{ olip_core_network.gateway }}"
       IPFS_GATEWAY_PORT: "{{ olip_ipfs_api_port }}"
-      DOCKER_REGISTRY_HOST: "192.168.100.107:6000"
+      DOCKER_REGISTRY_HOST: "{{ olip_core_network.gateway }}:6500"
       API_BASE_URL: "{{ olip_api_base_url }}"
       APPLICATION_ROOT: "{{ olip_external_base_url }}"
       INTERNAL_HOST_BASE_URL: "{{olip_internal_host_base_url | default(omit)}}"
-      BOX_REPOSITORY_IPN: /ipfs/QmddE881a8JHbkwUVUNC3ZJiGsArDSfvbWZgymSmxi6yF7
+      BOX_REPOSITORY_IPN: /ipfs/{{ OLIP_FILE_DESCRIPTOR }}
 
 - name: Install Dashboard
   docker_container:
