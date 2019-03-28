@@ -7,11 +7,18 @@
     state: directory
   with_items:
     - config-files/traefik
-    - config-files/nginx
-    - config-files/uwsgi
-    - ideascube/main
-    - hugo/source
-    - olip
+    # - config-files/nginx
+    # - config-files/uwsgi
+    # - ideascube/main
+    # - hugo/source
+    - olip_bdd
+    - olip_data_dir
+
+- name: Set permission data_dir for containers
+  file:
+    path: /media/hdd/olip_data_dir
+    state: directory
+    mode: 0777
 
 - name: Copy configuration files
   copy:
@@ -19,33 +26,33 @@
     dest: "{{ item.dest }}"
   with_items:
     - { src: 'traefik.toml', dest: '/media/hdd/config-files/traefik/traefik.toml' }
-    - { src: 'nginx.conf', dest: '/media/hdd/config-files/nginx/nginx.conf' }
-    - { src: 'ideascube.ini', dest: '/media/hdd/config-files/uwsgi/ideascube.ini' }
-    - { src: 'uwsgi_params', dest: '/media/hdd/ideascube/'}
+    # - { src: 'nginx.conf', dest: '/media/hdd/config-files/nginx/nginx.conf' }
+    # - { src: 'ideascube.ini', dest: '/media/hdd/config-files/uwsgi/ideascube.ini' }
+    # - { src: 'uwsgi_params', dest: '/media/hdd/ideascube/'}
     - { src: '45-pull-containers', dest: '/etc/hotplug.d/iface/45-pull-containers'}
 
-- name: Copy configuration templates
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - { src: 'default.conf.j2', dest: '/media/hdd/config-files/nginx/default.conf' }
+# - name: Copy configuration templates
+#   template:
+#     src: "{{ item.src }}"
+#     dest: "{{ item.dest }}"
+#   with_items:
+#     - { src: 'default.conf.j2', dest: '/media/hdd/config-files/nginx/default.conf' }
 
 - include: traefik.yml
   tags:
     - pull_container
 
-- include: ideascube.yml
-  tags:
-    - pull_container
-
-- include: kiwix.yml
-  tags:
-    - pull_container
-
-- include: kolibri.yml
-  tags:
-    - pull_container
+# - include: ideascube.yml
+#   tags:
+#     - pull_container
+#
+# - include: kiwix.yml
+#   tags:
+#     - pull_container
+#
+# - include: kolibri.yml
+#   tags:
+#     - pull_container
 
 - include: olip.yml
   tags:

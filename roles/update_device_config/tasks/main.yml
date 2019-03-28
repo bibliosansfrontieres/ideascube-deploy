@@ -1,38 +1,38 @@
 ---
-- name: "Set ideascube index"
-  set_fact:
-    ideascube_index: "{{idx}}"
-  when: item.name == "ideascube"
-  loop: "{{ containers }}"
-  loop_control:
-    index_var: idx
-
-- name: "Set kolibri index"
-  set_fact:
-    kolibri_index: "{{idx}}"
-  when: item.name == "kolibri"
-  loop: "{{ containers }}"
-  loop_control:
-    index_var: idx
-
-- name: "Set kiwix index"
-  set_fact:
-    kiwix_index: "{{idx}}"
-  when: item.name == "kiwix"
-  loop: "{{ containers }}"
-  loop_control:
-    index_var: idx
-
-- name: "Set hugo index"
-  set_fact:
-    hugo_index: "{{idx}}"
-  when: item.name == "hugo"
-  loop: "{{ containers }}"
-  loop_control:
-    index_var: idx
-
-- debug:
-    msg: Ideascube "{{ideascube_index}}", Kolibri "{{kolibri_index}}", Kiwix "{{kiwix_index}}", Hugo "{{hugo_index | default(omit)}}"
+# - name: "Set ideascube index"
+#   set_fact:
+#     ideascube_index: "{{idx}}"
+#   when: item.name == "ideascube"
+#   loop: "{{ containers }}"
+#   loop_control:
+#     index_var: idx
+#
+# - name: "Set kolibri index"
+#   set_fact:
+#     kolibri_index: "{{idx}}"
+#   when: item.name == "kolibri"
+#   loop: "{{ containers }}"
+#   loop_control:
+#     index_var: idx
+#
+# - name: "Set kiwix index"
+#   set_fact:
+#     kiwix_index: "{{idx}}"
+#   when: item.name == "kiwix"
+#   loop: "{{ containers }}"
+#   loop_control:
+#     index_var: idx
+#
+# - name: "Set hugo index"
+#   set_fact:
+#     hugo_index: "{{idx}}"
+#   when: item.name == "hugo"
+#   loop: "{{ containers }}"
+#   loop_control:
+#     index_var: idx
+#
+# - debug:
+#     msg: Ideascube "{{ideascube_index}}", Kolibri "{{kolibri_index}}", Kiwix "{{kiwix_index}}", Hugo "{{hugo_index | default(omit)}}"
 
 - name: Guess if project type is ideasbox
   set_fact:
