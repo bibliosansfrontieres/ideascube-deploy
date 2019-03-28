@@ -1,21 +1,23 @@
-FROM i386/alpine:latest
+FROM i386/python:3.6-alpine3.8
 
+ENV KOLIBRI_VERSION 0.12.1
 
-#install python
-RUN apk update && apk add \
-    python
-
-#no need to add cleaning command as alpine cleans package automatically
-
-#download kolibri
-RUN wget -O kolibri http://learningequality.org/r/kolibri-pex-latest
-
-#make executable
-RUN chmod +x kolibri
-
-#used for storing db and content (used when mounting volume)
-RUN mkdir /root/.kolibri
+RUN mkdir -p /opt/kolibri && \
+    cd /opt/kolibri && \
+    wget http://pantry.learningequality.org/downloads/kolibri/v${KOLIBRI_VERSION}/kolibri-${KOLIBRI_VERSION}.pex -O /opt/kolibri/kolibri.pex && \
+    chmod +x /opt/kolibri/kolibri.pex && \
+    mkdir /data
 
 EXPOSE 8080
 
-CMD ./kolibri start && tail -f /root/.kolibri/server.log
+WORKDIR /data
+
+RUN apk add --no-cache tini && \
+    adduser -S -h /data kolibri && \
+    chown kolibri /data
+
+USER kolibri
+
+ENTRYPOINT [ "tini", "-s", "--" ]
+
+CMD ["python", "/opt/kolibri/kolibri.pex", "start", "--foreground"]
