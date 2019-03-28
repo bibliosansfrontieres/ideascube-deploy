@@ -4,7 +4,7 @@ QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG
 ]
 ipfs_version: 0.4.19
 
-ipfs_announce: "/ip4/{{ inventory_hostname }}/4001"
+ipfs_announce: "/ip4/{{ inventory_hostname }}/tcp/4001"
 
 ipfs_import_keys:
   - { src: "ipfs_keys/bsf-test-retrieve-file", name: bsf-test-retrieve-file }
@@ -18,3 +18,4 @@ ipfs_config:
   - { key: Mounts.FuseAllowOther, value: "true", json: true }
   - { key: Swarm.ConnMgr.HighWater, value: "20", json: true }
   - { key: Swarm.ConnMgr.LowWater, value: "10", json: true }
+  - { key: Bootstrap, value: "\"[\\\"/ip4/51.15.137.212/tcp/4001/ipfs/QmcbT7oEDPPuzD2vGkQqkpj9F4eDtn2rT1YZJ8ypapURcn\\\"]\"", json: true }
