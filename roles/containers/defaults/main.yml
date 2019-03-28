@@ -9,9 +9,9 @@ olip_core_network:
   gateway: "173.17.0.1"
 olip_ipfs_api_port: "{{ ipfs_api_port }}"
 olip_ipfs_gw_port: "{{ ipfs_gateway_port }}"
-ipfs_gateway_port: 8181
+ipfs_gateway_port: 8080
 ipfs_api_port: 5001
 ipfs_swarm_port: 4001
 olip_api_port: 5002
 olip_dashboard_port: 8082
-olip_external_base_url: http://127.0.0.1 
+olip_external_base_url: http://127.0.0.1
