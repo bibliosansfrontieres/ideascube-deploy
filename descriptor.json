@@ -8,7 +8,7 @@
       "picture": "",
       "containers": [
         {
-          "image": "ciqpq4lg4z32vyhv5qb4fg7lwfsb4f52usjeol3vrzlwvvvl2n6fhgy/bibliosansfrontieres/hugo:latest",
+          "image": "ciqbad4uadrhyzwmneyvrnh2u3tc7wtk5oxy37hz47sa7tnptjvb3tq/bibliosansfrontieres/hugo-i386:latest",
           "name": "hugo",
           "expose": 3000
         }
@@ -17,20 +17,20 @@
         {
           "content_id": "stitching-fr",
           "name": "Stitching",
-          "download_path": "/ipfs/QmT53Rsixa52xzbQjVTydMrFKEjCQSi63kHHDV3UK3yPxN",
-          "destination_path": "stitching-fr/",
-          "version": "0.0.3",
+          "download_path": "/ipfs/QmaqMmAiFMp2Ff9P7isuSxRjZE9ZS1YZh5NWX55AWbjDuA",
+          "destination_path": "./",
+          "version": "0.0.4",
           "description": "How to make DIY stitching",
           "endpoint": {
               "container": "hugo",
-              "name": "Mediacenter",
-              "url": ""
+              "name": "Stitching",
+              "url": "stitching-fr"
           }
         }
       ],
       "search": {
         "container": "hugo",
-        "opensearch_url": "/api/ideascubeng/v1.0/opensearch/search?q="
+        "opensearch_url": "/descriptor.xml"
       }
     },
     {
@@ -51,7 +51,7 @@
       "bundle": "kiwix.app",
       "name": "Kiwix software",
       "description": "This is the Kiwix software",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "picture": "",
       "containers": [
         {
