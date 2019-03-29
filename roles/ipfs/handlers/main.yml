@@ -3,5 +3,5 @@
 
 - name: restart ipfs
   service:
-    name: ipf
+    name: ipfs
     state: restarted
