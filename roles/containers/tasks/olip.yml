@@ -48,6 +48,8 @@
       APPLICATION_ROOT: "{{ olip_external_base_url }}"
       INTERNAL_HOST_BASE_URL: "{{olip_internal_host_base_url | default(omit)}}"
       BOX_REPOSITORY_IPN: /ipfs/{{ OLIP_FILE_DESCRIPTOR }}
+      OAUTH2_ALWAYS_ACCEPT_REDIRECT_URI: True
+      OAUTH2_DEV_MODE: True
 
 - name: Install Dashboard
   docker_container:
