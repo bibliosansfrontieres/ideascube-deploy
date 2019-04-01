@@ -58,3 +58,6 @@
    - /srv/
    - /etc/hotplug.d/iface/90-ar2f
    - /etc/hotplug.d/iface/40-balena-engine
+   - /etc/logrotate.d/ppp
+   - /etc/logrotate.d/rabbitmq-server
+   - /etc/logrotate.d/nginx
