@@ -39,7 +39,7 @@
       - /var/run/balena-engine.sock:/var/run/balena-engine.sock
     env:
       DOCKER_HOST: "unix://var/run/balena-engine.sock"
-      HOST_DATA_DIR: /media/hdd/olip_data_dir/
+      HOST_DATA_DIR: /media/hdd/olip_data_dir
       SQLALCHEMY_DATABASE_URI: sqlite:////data/app.db
       IPFS_GATEWAY_HOST: "{{ olip_core_network.gateway }}"
       IPFS_GATEWAY_PORT: "{{ olip_ipfs_api_port }}"
