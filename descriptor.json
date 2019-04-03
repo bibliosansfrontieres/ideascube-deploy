@@ -4,11 +4,11 @@
       "bundle": "hugo.app",
       "name": "Mediacenter",
       "description": "Mediacenter for OLIP",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "picture": "",
       "containers": [
         {
-          "image": "ciqbad4uadrhyzwmneyvrnh2u3tc7wtk5oxy37hz47sa7tnptjvb3tq/bibliosansfrontieres/hugo-i386:latest",
+          "image": "ciqnmmm26dd5uckguibfgiarnovc6kjxum2zlpkl4jvibpapzwtqxda/bibliosansfrontieres/hugo-olip-i386:latest",
           "name": "hugo",
           "expose": 3000
         }
@@ -19,7 +19,7 @@
           "name": "Stitching",
           "download_path": "/ipfs/QmaqMmAiFMp2Ff9P7isuSxRjZE9ZS1YZh5NWX55AWbjDuA",
           "destination_path": "./",
-          "version": "0.0.4",
+          "version": "0.0.6",
           "description": "How to make DIY stitching",
           "endpoint": {
               "container": "hugo",
@@ -37,11 +37,11 @@
       "bundle": "kolibri.app",
       "name": "Kolibri software",
       "description": "This is the Kolibri software",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "picture": "",
       "containers": [
         {
-          "image": "ciqkr6d3abvarrbahidl4dzfz76rxcxfm7mrkgzkwnblmtx6hg3zzzq/bibliosansfrontieres/kolibri-olip-i386:latest",
+          "image": "ciqpzyipbruwwzjwwzjugyifml226lw2hxicjimecmvi3gyd62ax3wq/bibliosansfrontieres/kolibri-olip-i386:latest",
           "name": "kolibri",
           "expose": 8080
         }
@@ -51,11 +51,11 @@
       "bundle": "kiwix.app",
       "name": "Kiwix software",
       "description": "This is the Kiwix software",
-      "version": "0.0.3",
+      "version": "0.0.5",
       "picture": "",
       "containers": [
         {
-          "image": "ciqmvtndx5d4kvqat3t2jldafsmw7szxhycoy2tebwnkfqz5f5ol7bi/bibliosansfrontieres/kiwix-olip-i386:latest",
+          "image": "ciqhewjalkzwnemp4kfrlfxsw7fhi6ttphtykqjxfwuyfiass4m3gdi/bibliosansfrontieres/kiwix-olip-i386:latest",
           "name": "kiwix",
           "expose": 8080
         }
@@ -66,7 +66,7 @@
           "name": "Wikipedia af",
           "download_path": "/ipfs/Qmazpa6AgYzjLHhYzFG4UWPGCxztpfRuLT1vmXFP2L4cWG",
           "destination_path": "wikipedia_af_all_nopic_2019-02.zim",
-          "version": "0.0.3",
+          "version": "0.0.5",
           "description": "Wikipedia in AF language"
         }
       ]
