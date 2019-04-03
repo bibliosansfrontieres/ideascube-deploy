@@ -6,7 +6,7 @@ ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="master"
-GIT_RELEASE_TAG="1.4.3"
+GIT_RELEASE_TAG="1.4.4"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
@@ -100,7 +100,7 @@ done
 
 echo -n "[+] Retrieve device configuration from API"
 apt-get install --quiet --quiet -y jq
-if [[ ! `ping -q -c 2 10.10.9.1` ]]
+if [[ `ping -q -c 2 10.10.9.1` ]]
 then
   curl -vs http://tincmaster.bsf-intranet.org:42685/projects?project_name=$PROJECT_NAME |jq ".[]" > /etc/ansible/facts.d/device_configuration.json
 else
