@@ -118,7 +118,7 @@
     url:  http://{{ideascube_api_service}}/devices
     method: POST
     body:
-        project: "{{id}}"
+        # project: "{{id}}"
         serial: "{{ansible_product_serial}}"
         uuid: "{{ansible_product_uuid}}"
         private_ip: "{{ansible_default_ipv4.address}}"
