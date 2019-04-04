@@ -7,6 +7,7 @@ ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="master"
 GIT_RELEASE_TAG="1.4.6"
+EXTRA_VARS="@/etc/ansible/facts.d/device_configuration.json"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
@@ -90,7 +91,15 @@ do
 
         shift
         ;;
+        --extra-vars)
 
+            if [ -n "$2" ]
+            then
+                EXTRA_VARS+=" $2"
+            fi
+
+        shift
+        ;;
         *)
             help
         ;;
@@ -109,7 +118,7 @@ fi
 
 cd $ANSIBLECAP_PATH
 
-echo "$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @/etc/ansible/facts.d/device_configuration.json $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"$EXTRA_VARS\" $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
-$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.json" $TAGS
+$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"$EXTRA_VARS\" $TAGS
