@@ -1,4 +1,6 @@
 ---
+- name: Send start notification.
+  command: {{ callback_fullpath }} "Starting file copy, this can take quite some time. Go and grad a cup of tea." {{ build_process_id }}
 
 - name: Try to synchronize data from local server
   block:
@@ -13,6 +15,7 @@
         - var_cache_idc
         - var_idc
   rescue:
+    - command: {{ callback_fullpath }} --error_lvl WARNING "Builded install failed, trying regular install." {{ build_process_id }}
     - include: ideascube_regular_install.yml
   always:
     - mount:
@@ -20,3 +23,7 @@
         state: absent
   tags:
    - update_content
+
+- name: Send end notification.
+  command: {{ callback_fullpath }} "File copy was completed successfully." {{ build_process_id }}
+
