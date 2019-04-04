@@ -27,10 +27,6 @@
   command: balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog cache update
 
 - name: Install, upgrade or remove a package present in device.json
-  command: "{% if 'present' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog install {{ item.name }}
-    {% elif 'latest' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog update {{ item.name }}
-    {% elif 'absent' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog remove {{ item.name }}
-    {% elif 'reinstall' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog reinstall {{ item.name }}
-    {% else %}echo '[+] nothing to do'{% endif %}"
+  include: install_package.yml
   with_items: '{{ containers[ideascube_index].content }}'
   notify: Restart Kiwix
