@@ -1,4 +1,13 @@
 ---
+- name: Check if DB has been created
+  stat:
+    path: /media/hdd/ideascube/main/default.sqlite
+  register: stat_db
+
+- name: Check if remotes exist
+  stat:
+    path: /media/hdd/ideascube/main/catalog/remotes/Omeka.json
+  register: stat_remote
 
 - name: Initialize ideascube database & collectstatic
   command: balena-engine exec {{ containers[ideascube_index].name }} ideascube {{item}}
@@ -6,6 +15,7 @@
     - "migrate --database=default"
     - "migrate --database=transient"
     - "collectstatic --noinput"
+  when: stat_db.stat.exists == False
 
 - name: Install Ideascube catalogs
   command: balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog remotes add "{{ item.name }}" "{{ item.description }}" "{{ item.url }}"
@@ -22,6 +32,7 @@
   - name: "Omeka"
     description: "Omeka packages"
     url: http://catalog.ideascube.org/omeka.yml
+  when: stat_remote.stat.exists == False
 
 - name: Update ideascube catalog cache before downloading
   command: balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog cache update
