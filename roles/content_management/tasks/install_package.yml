@@ -1,10 +1,10 @@
 ---
 - name: Installing package {{ item.name }}
   block:
-    - command: "{% if 'present' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog install {{ item.name }}
-      {% elif 'latest' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog update {{ item.name }}
-      {% elif 'absent' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog remove {{ item.name }}
-      {% elif 'reinstall' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog reinstall {{ item.name }}
+    - command: "{% if 'present' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} sh -c 'LANG=C.UTF-8 ideascube catalog install {{ item.name }}'
+      {% elif 'latest' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} 'LANG=C.UTF-8 ideascube catalog update {{ item.name }}'
+      {% elif 'absent' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} 'LANG=C.UTF-8 ideascube catalog remove {{ item.name }}'
+      {% elif 'reinstall' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} 'LANG=C.UTF-8 ideascube catalog reinstall {{ item.name }}'
       {% else %}echo '[+] nothing to do'{% endif %}"
     - command: {{ callback_fullpath }} "File {{ item.name }} was installed successfully." {{ build_process_id }}
   rescue:
