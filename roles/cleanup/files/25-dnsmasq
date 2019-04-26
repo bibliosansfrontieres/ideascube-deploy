@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. $IPKG_INSTROOT/lib/functions.sh                                                                                                                                                                                                                                      [640/959]
+. $IPKG_INSTROOT/lib/functions.sh
 . $IPKG_INSTROOT/lib/functions/network.sh
 
 check_offline(){
