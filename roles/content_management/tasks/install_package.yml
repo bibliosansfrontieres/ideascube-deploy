@@ -6,6 +6,6 @@
       {% elif 'absent' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} 'LANG=C.UTF-8 ideascube catalog remove {{ item.name }}'
       {% elif 'reinstall' in item.status %}balena-engine exec {{ containers[ideascube_index].name }} 'LANG=C.UTF-8 ideascube catalog reinstall {{ item.name }}'
       {% else %}echo '[+] nothing to do'{% endif %}"
-    - command: {{ callback_fullpath }} "File {{ item.name }} was installed successfully." {{ build_process_id }}
+    - command: {{ callback_fullpath }} "File {{ item.name }} was installed successfully." {{ ansible_local.process_id }}
   rescue:
-    - command: {{ callback_fullpath }} --error_lvl WARNING "Failed installing {{ item.name }}." {{ build_process_id }}
+    - command: {{ callback_fullpath }} --error_lvl WARNING "Failed installing {{ item.name }}." {{ ansible_local.process_id }}
