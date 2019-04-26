@@ -1,6 +1,6 @@
 ---
 - name: Send start notification.
-  command: "{{ callback_fullpath }} 'Starting file copy, this can take quite some time. Go and grad a cup of tea.' {{ ansible_local.process_id }}"
+  command: "{{ callback_fullpath }} 'Starting file copy, this can take quite some time. Go and grad a cup of tea.' {{ ansible_local.device_configuration.process_id }}"
 
 - name: Try to synchronize data from local server
   block:
@@ -15,7 +15,7 @@
         - var_cache_idc
         - var_idc
   rescue:
-    - command: "{{ callback_fullpath }} --error_lvl WARNING 'Builded install failed, trying regular install.' {{ ansible_local.process_id }}"
+    - command: "{{ callback_fullpath }} --error_lvl WARNING 'Builded install failed, trying regular install.' {{ ansible_local.device_configuration.process_id }}"
     - include: ideascube_regular_install.yml
   always:
     - mount:
@@ -25,5 +25,5 @@
    - update_content
 
 - name: Send end notification.
-  command: "{{ callback_fullpath }} 'File copy was completed successfully.' {{ ansible_local.process_id }}"
+  command: "{{ callback_fullpath }} 'File copy was completed successfully.' {{ ansible_local.device_configuration.process_id }}"
 
