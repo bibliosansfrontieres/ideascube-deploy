@@ -2,7 +2,7 @@
 - include_vars: group_vars/{{ ansible_architecture }}.yml
 
 - name: Fix broken package
-  shell: dpkg --configure -a
+  shell: dpkg --force-confdef --force-confold --configure -a
   tags:
     - packages
 
