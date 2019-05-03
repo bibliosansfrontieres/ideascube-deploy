@@ -6,7 +6,7 @@ ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="master"
-GIT_RELEASE_TAG="1.4.6"
+GIT_RELEASE_TAG="1.4.9"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
@@ -90,7 +90,15 @@ do
 
         shift
         ;;
+        --extra-vars)
 
+            if [ -n "$2" ]
+            then
+                EXTRA_VARS2="--extra-vars $2"
+            fi
+
+        shift
+        ;;
         *)
             help
         ;;
@@ -100,16 +108,11 @@ done
 
 echo -n "[+] Retrieve device configuration from API"
 apt-get install --quiet --quiet -y jq
-if [[ `ping -q -c 2 10.10.9.1` ]]
-then
-  curl -vs http://tincmaster.bsf-intranet.org:42685/projects?project_name=$PROJECT_NAME |jq ".[]" > /etc/ansible/facts.d/device_configuration.json
-else
-  curl -vs http://10.10.9.38:1337/projects?project_name=$PROJECT_NAME |jq ".[]" > /etc/ansible/facts.d/device_configuration.json
-fi
+curl -vs http://tincmaster.bsf-intranet.org:42685/projects?project_name=$PROJECT_NAME |jq ".[]" > /etc/ansible/facts.d/device_configuration.fact
 
 cd $ANSIBLECAP_PATH
 
-echo "$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars @/etc/ansible/facts.d/device_configuration.json $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
-$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.json" $TAGS
+$ANSIBLE_BIN --purge -C $GIT_RELEASE_TAG -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $EXTRA_VARS2 $TAGS

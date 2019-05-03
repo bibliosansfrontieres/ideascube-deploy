@@ -1,14 +1,1 @@
 localhost ansible_connection=local
-
-[cmal-paris]
-#cap ansible_host=127.0.0.1 ansible_port=2024 ansible_user=root
-#192.168.100.216
-#10.12.107.175
-#192.168.100.170
-#192.168.1.1
-10.10.8.144
-#10.10.20.28
-#192.168.100.107
-
-[cmal-crest]
-192.168.100.108

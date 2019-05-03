@@ -28,6 +28,7 @@
     name: "{{ packages }}"
     state: absent
     purge: yes
+    dpkg_options: 'force-confold,force-confdef'
   vars:
     packages:
     - nginx
