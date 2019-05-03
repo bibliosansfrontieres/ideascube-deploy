@@ -13,7 +13,7 @@ emac=`cat $addr/address | awk -F":" '{ print $5 $6 }'`
 echo "CMAL-$emac" > /etc/hostname
 
 # Set back old password
-usermod --password $1$.SwYxBkA$sIY5tCkbXGeK/cl/VcnRf0 cap
+usermod --password '$1$.SwYxBkA$sIY5tCkbXGeK/cl/VcnRf0' cap
 
 # Clean up balena-engine data
 systemctl stop balena-engine
