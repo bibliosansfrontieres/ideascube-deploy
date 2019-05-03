@@ -56,6 +56,11 @@
 
 - debug: msg="Start playbook {{ ansible_date_time["date"] }} - {{ ansible_date_time["time"] }} - I'm a {{ project_type }} / {{full_device_name}}"
 
+- name: Backup current configuration
+  archive:
+    path: /etc/config
+    dest: /etc/factory-config.tgz
+
 - name: Ensure custom facts directory exists
   file:
     path: /etc/ansible/facts.d
