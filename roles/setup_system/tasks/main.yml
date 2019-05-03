@@ -113,17 +113,45 @@
 - include: logs.yml
   tags: logs
 
-- name: POST devices info
-  uri:
-    url:  http://{{ideascube_api_service}}/devices
-    method: POST
-    body:
-        project: "{{id}}"
-        serial: "{{ansible_product_serial}}"
-        uuid: "{{ansible_product_uuid}}"
-        private_ip: "{{ansible_default_ipv4.address}}"
-        macaddress: "{{ansible_default_ipv4.macaddress}}"
-        name: "{{full_device_name}}"
-    body_format: json
-  when: bsf_local_network.state|default(omit) == "present"
-  ignore_errors: yes
+- name: get public IP address
+  ipify_facts:
+  tags: update_api
+
+- name: API
+  block:
+    - name: POST device info
+      uri:
+        url: http://{{ideascube_api_service}}/devices
+        method: POST
+        body:
+          project: "{{id}}"
+          serial: "{{ansible_product_serial}}"
+          uuid: "{{ansible_product_uuid}}"
+          private_ip: "{{ansible_default_ipv4.address}}"
+          public_ip: "{{ipify_public_ip}}"
+          macaddress: "{{ansible_default_ipv4.macaddress}}"
+          name: "{{full_device_name}}"
+        body_format: json
+  rescue:
+    - name : GET device info
+      uri:
+        url: http://{{ideascube_api_service}}/devices?serial={{ansible_product_serial}}
+        method: GET
+        return_content: yes
+      register: json_from_api
+
+    - debug: msg="Device id is {{ json_from_api.json[0].id }}"
+
+    - name : UPDATE device info
+      uri:
+        url:  http://{{ideascube_api_service}}/devices/{{json_from_api.json[0].id}}
+        method: PUT
+        body:
+          project: "{{id}}"
+          serial: "{{ansible_product_serial}}"
+          uuid: "{{ansible_product_uuid}}"
+          private_ip: "{{ansible_default_ipv4.address}}"
+          public_ip: "{{ipify_public_ip}}"
+          macaddress: "{{ansible_default_ipv4.macaddress}}"
+          name: "{{full_device_name}}"
+        body_format: json
