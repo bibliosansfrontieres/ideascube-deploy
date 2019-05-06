@@ -67,10 +67,10 @@
     recurse: yes
     state: directory
 
-- name: Drop hosts file on device
-  template:
-    src: hosts.j2
+- name: Populate hosts file
+  lineinfile:
     dest: /etc/hosts
+    line: '192.168.1.1 {{ project_type }} kiwix.{{ project_type }} kolibri.{{ project_type }} sites.{{ project_type }} bsfcampus.{{ project_type }}'
 
 - name: Switch to FDN DNS server
   command: uci set dhcp.@dnsmasq[0].server='80.67.169.12'
