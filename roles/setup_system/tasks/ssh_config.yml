@@ -21,7 +21,7 @@
     - id_rsa
     - id_rsa.pub
   register: got_the_key
-  when: cache_machine.state|default(omit) == "present"
+  when: bsf_local_network.state|default(omit) == "present"
 
 - name: Generate a new ssh key
   shell: ssh-keygen -t rsa -b 4096 -C "{{ full_device_name }}" -f /root/.ssh/{{ full_device_name }} -N ""
