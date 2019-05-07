@@ -9,3 +9,7 @@
     - command: "{{ callback_fullpath }} \"File {{ item.name }} was installed successfully.\" {{ ansible_local.device_configuration.process_id }}"
   rescue:
     - command: "{{ callback_fullpath }} --error_lvl WARNING \"Failed installing {{ item.name }}.\" {{ ansible_local.device_configuration.process_id }}"
+  always:
+    - mount:
+        name: /media/hdd/ideascube-builded
+        state: absent
