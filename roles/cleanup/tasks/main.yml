@@ -47,18 +47,15 @@
     state: absent
   with_items:
    - /etc/nginx/
-   # - /lib/systemd/system/ubus.service
    - /lib/systemd/system/contenthub-usb.service
-   # - /lib/systemd/system/ubox.service
    - /lib/systemd/system/uhttpd.service
    - /lib/systemd/system/rabbitmq-server.service
-   # - /etc/hotplug.d/iface/25-dnsmasq
    - /etc/django-fastcgi
-   # - nginx.conf
-   # - nginx.default
    - /srv/
    - /etc/hotplug.d/iface/90-ar2f
    - /etc/hotplug.d/iface/40-balena-engine
    - /etc/logrotate.d/ppp
    - /etc/logrotate.d/rabbitmq-server
    - /etc/logrotate.d/nginx
+   - /etc/udev/rules.d/80-uploaded.rules
+   - /etc/udev/rules.d/81-modem.rules
