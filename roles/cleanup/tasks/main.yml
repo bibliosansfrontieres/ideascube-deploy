@@ -33,13 +33,15 @@
     packages:
     - nginx
 
-- name: Copy tweaked hotplug.d service script
+- name: Copy tweaked hotplug.d firewall service script
   copy:
-    src: "{{item}}"
-    dest: /etc/hotplug.d/iface/{{item}}
-  with_items:
-    - 20-firewall
-    - 25-dnsmasq
+    src: "20-firewall"
+    dest: /etc/hotplug.d/iface/20-firewall
+
+- name: Copy tweaked hotplug.d dnsmasq service script
+  template:
+    src: "25-dnsmasq.j2"
+    dest: /etc/hotplug.d/iface/25-dnsmasq
 
 - name: Remove unwanted files
   file:
@@ -47,18 +49,15 @@
     state: absent
   with_items:
    - /etc/nginx/
-   # - /lib/systemd/system/ubus.service
    - /lib/systemd/system/contenthub-usb.service
-   # - /lib/systemd/system/ubox.service
    - /lib/systemd/system/uhttpd.service
    - /lib/systemd/system/rabbitmq-server.service
-   # - /etc/hotplug.d/iface/25-dnsmasq
    - /etc/django-fastcgi
-   # - nginx.conf
-   # - nginx.default
    - /srv/
    - /etc/hotplug.d/iface/90-ar2f
    - /etc/hotplug.d/iface/40-balena-engine
    - /etc/logrotate.d/ppp
    - /etc/logrotate.d/rabbitmq-server
    - /etc/logrotate.d/nginx
+   - /etc/udev/rules.d/80-uploaded.rules
+   - /etc/udev/rules.d/81-modem.rules

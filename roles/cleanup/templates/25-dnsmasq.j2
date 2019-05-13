@@ -9,7 +9,7 @@ check_offline(){
     result="1"
   }
     [ "$result" = "0" ] && {
-      uci del_list dhcp.@dnsmasq[0].address='/ideascube/192.168.1.1'
+      uci del_list dhcp.@dnsmasq[0].address='/{{project_type}}/192.168.1.1'
       uci add_list dhcp.@dnsmasq[0].address='/#/74.125.224.72'
       uci commit dhcp
       /etc/init.d/dnsmasq reload
@@ -23,7 +23,7 @@ check_offline
 
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" -o "$INTERFACE" = "modem" ] && {
   uci del_list dhcp.@dnsmasq[0].address='/#/74.125.224.72'
-  uci add_list dhcp.@dnsmasq[0].address='/ideascube/192.168.1.1'
+  uci add_list dhcp.@dnsmasq[0].address='/{{project_type}}/192.168.1.1'
   uci commit dhcp
   /etc/init.d/dnsmasq reload
 }
