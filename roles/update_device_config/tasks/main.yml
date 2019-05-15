@@ -136,3 +136,13 @@
     register: bsf_local_network
   rescue:
   - debug: msg="Not in BSF local network"
+
+- name: Copy tweaked hotplug.d firewall service script
+  copy:
+    src: "20-firewall"
+    dest: /etc/hotplug.d/iface/20-firewall
+
+- name: Copy tweaked hotplug.d dnsmasq service script
+  template:
+    src: "25-dnsmasq.j2"
+    dest: /etc/hotplug.d/iface/25-dnsmasq
