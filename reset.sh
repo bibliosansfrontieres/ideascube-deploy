@@ -31,6 +31,10 @@ systemctl stop balena-engine
 systemctl disable balena-engine
 rm -rf /var/lib/balena-engine/
 
+# Clean initcap
+rm -f /var/spool/cron/crontabs/root
+rm -f /opt/*
+
 # Force umount the HDD
 umount -A -l /dev/sda1
 
