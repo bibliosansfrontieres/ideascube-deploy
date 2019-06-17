@@ -26,6 +26,9 @@
   - name: "StaticSites"
     description: "Static sites"
     url: http://catalog.ideascube.org/static-sites.yml
+  - name: "WARC websites"
+    description: "Website archive in WARC format"
+    url: http://catalog.ideascube.org/warc-websites.yml
   - name: "OSMybon"
     description: "Experimental OSM catalog"
     url: http://catalog.ideascube.org/osmaps.yml
