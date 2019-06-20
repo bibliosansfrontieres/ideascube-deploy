@@ -41,5 +41,7 @@ server {
 
     server_name sites.{{project_type}};
 
-    return 301 $scheme://sites.{{project_type}}:1020/all$request_uri;
+    charset utf-8;
+
+    root /var/ideascube/nginx/;
 }

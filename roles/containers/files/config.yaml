@@ -1,8 +1,0 @@
-collections:
-  all: $all
-
-collections_root: /webarchive
-
-archive_paths: /webarchive/*/archive
-index_paths: /webarchive/*/indexes
-static_path: /webarchive/*/static

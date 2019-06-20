@@ -34,8 +34,6 @@
 
 - include: ideascube.yml
 
-- include: waybackreplay.yml
-
 - include: kiwix.yml
 
 - include: kolibri.yml
