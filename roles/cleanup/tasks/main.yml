@@ -21,6 +21,7 @@
     - django-fastcgi
     - celeryd.service
     - nginx.service
+    - resethostname.sh
   ignore_errors: yes
 
 - name: Remove unwanted packages before upgrading
@@ -39,6 +40,7 @@
     state: absent
   with_items:
    - /etc/nginx/
+   - /etc/init.d/resethostname.sh
    - /lib/systemd/system/contenthub-usb.service
    - /lib/systemd/system/uhttpd.service
    - /lib/systemd/system/rabbitmq-server.service
