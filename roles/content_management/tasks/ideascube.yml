@@ -1,6 +1,6 @@
 ---
 - name: Send start notification.
-  command: "{{ callback_fullpath }} 'Starting file copy, this can take quite some time. Go and grad a cup of tea.' {{ ansible_local.device_configuration.process_id }}"
+  command: "{{ callback_fullpath }} 'Starting file copy, this can take quite some time. Go and grab a cup of tea.' {{ ansible_local.device_configuration.process_id }}"
 
 - name: Try to synchronize data from local server
   block:
