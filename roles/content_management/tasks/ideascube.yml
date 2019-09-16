@@ -10,10 +10,10 @@
         fstype: cifs
         opts: guest
         state: mounted
-    - command: rsync -a /media/hdd/ideascube-builded/{{ item}}/ /media/hdd/ideascube/
+    - command: tar -xf /media/hdd/ideascube-builded/{{ item}} /media/hdd/ideascube/
       with_items:
-        - var_cache_idc
-        - var_idc
+        - var_cache_idc.tar
+        - var_idc.tar
     - command: "{{ callback_fullpath }} 'File copy was completed successfully.' {{ ansible_local.device_configuration.process_id }}"
   rescue:
     - command: "{{ callback_fullpath }} --error_lvl WARNING 'Builded install failed, trying regular install.' {{ ansible_local.device_configuration.process_id }}"
