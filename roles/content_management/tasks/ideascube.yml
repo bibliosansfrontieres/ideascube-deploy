@@ -10,7 +10,7 @@
         fstype: cifs
         opts: guest
         state: mounted
-    - command: tar -xf /media/hdd/ideascube-builded/{{ item}} /media/hdd/ideascube/
+    - command: tar -xf /media/hdd/ideascube-builded/{{item}} -C /media/hdd/ideascube/
       with_items:
         - var_cache_idc.tar
         - var_idc.tar
