@@ -27,6 +27,11 @@
   tags:
     - pull_container
 
+- name: Get Nginx logs stored in the container
+  command: balena-engine cp nginx:/var/log/nginx/ /media/hdd/log/nginx/
+  tags:
+    - pull_container
+
 - name: Pull Nginx from repository and start it
   docker_container:
     docker_host: unix://var/run/balena-engine.sock
