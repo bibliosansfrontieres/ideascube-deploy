@@ -30,6 +30,8 @@
       dest: uwsgi
     - src: nginx.logrotate.j2
       dest: nginx
+  tags:
+    - pull_container
 
 - name: copy hdw info script
   copy:
