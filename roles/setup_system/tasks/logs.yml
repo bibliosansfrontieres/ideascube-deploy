@@ -26,6 +26,10 @@
       dest: pip-freeze
     - src: hdw-info.logrotate.j2
       dest: hdw-info
+    - src: uwsgi.logrotate.j2
+      dest: uwsgi
+    - src: nginx.logrotate.j2
+      dest: nginx
 
 - name: copy hdw info script
   copy:
