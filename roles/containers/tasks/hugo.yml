@@ -7,10 +7,10 @@
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[hugo_index].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[hugo_index].name }}.{{project_domain_name}}"
     # volumes: "/media/hdd/hugo/source:/hugo"
     env:
-      HUGO_BASE_URL: "http://{{ containers[hugo_index].name }}.{{project_type}}"
+      HUGO_BASE_URL: "http://{{ containers[hugo_index].name }}.{{project_domain_name}}"
   tags:
     - pull_container
   when: containers[hugo_index] is defined

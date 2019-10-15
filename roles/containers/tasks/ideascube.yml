@@ -10,13 +10,13 @@
     image: "{{ containers[ideascube_index].image_id }}"
     env:
       IDEASCUBE_ID: "idc"
-      DOMAIN: "{{project_type}}"
+      DOMAIN: "{{project_domain_name}}"
       DEBUG: "False"
     published_ports: 9000:9000
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[ideascube_index].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[ideascube_index].name }}.{{project_domain_name}}"
     entrypoint: "uwsgi --ini /tmp/ideascube.ini --logto /var/log/uwsgi/ideascube.log"
     volumes:
       - /media/hdd/ideascube:/var/ideascube
@@ -36,7 +36,7 @@
     restart_policy: always
     state: started
     pull: yes
-    labels: traefik.frontend.rule=Host:"{{project_type}},sites.{{project_type}}"
+    labels: traefik.frontend.rule=Host:"{{project_domain_name}},sites.{{project_domain_name}}"
     volumes:
       - /media/hdd/ideascube/static/:/var/ideascube/static/
       - /media/hdd/ideascube/main/media/:/var/ideascube/main/media/

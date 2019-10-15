@@ -6,7 +6,7 @@ upstream ideascube {
 # configuration of the server
 server {
     listen       80;
-    server_name  {{project_type}};
+    server_name  {{project_domain_name}};
     charset     utf-8;
 
     # max upload size
@@ -39,7 +39,7 @@ server {
 server {
     listen 80;
 
-    server_name sites.{{project_type}};
+    server_name sites.{{project_domain_name}};
 
     charset utf-8;
 

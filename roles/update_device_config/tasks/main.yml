@@ -34,27 +34,12 @@
 - debug:
     msg: Ideascube "{{ideascube_index}}", Kolibri "{{kolibri_index}}", Kiwix "{{kiwix_index}}", Hugo "{{hugo_index | default(omit)}}"
 
-- name: Guess if project type is ideasbox
-  set_fact:
-    project_type: ideasbox
-  when: project_name | regex_search('(idb)') == "idb"
-
-- name: Guess if project type is KoomBook
-  set_fact:
-    project_type: koombook
-  when: project_name | regex_search('(kb)') == "kb"
-
-- name: Guess if project type is Ideascube
-  set_fact:
-    project_type: ideascube
-  when: project_name | regex_search('(idc)') == "idc"
-
 - name: Set device name variable
   set_fact:
     hostname: "{{ project_name }}"
     full_device_name: "{{ project_name }}-{{ ansible_default_ipv4.macaddress[11:17] | replace(':', '') }}"
 
-- debug: msg="Start playbook {{ ansible_date_time["date"] }} - {{ ansible_date_time["time"] }} - I'm a {{ project_type }} / {{full_device_name}}"
+- debug: msg="Start playbook {{ ansible_date_time["date"] }} - {{ ansible_date_time["time"] }} - I'm a {{ project_domain_name }} / {{full_device_name}}"
 
 - name: Backup current configuration
   archive:
@@ -70,33 +55,33 @@
 - name: Populate hosts file
   lineinfile:
     dest: /etc/hosts
-    line: '192.168.1.1 {{ project_type }} kiwix.{{ project_type }} kolibri.{{ project_type }} sites.{{ project_type }} bsfcampus.{{ project_type }}'
+    line: '192.168.1.1 {{ project_domain_name }} kiwix.{{ project_domain_name }} kolibri.{{ project_domain_name }} sites.{{ project_domain_name }} bsfcampus.{{ project_domain_name }}'
 
 - name: Switch to FDN DNS server
   command: uci set dhcp.@dnsmasq[0].server='80.67.169.12'
 
 - name: Server entries in /etc/hosts
-  command: uci set dhcp.@dnsmasq[0].domain='lan'
+  command: uci set dhcp.@dnsmasq[0].domain='io'
 
 - name: Ensure dnsmasq address is not present
   shell: uci get dhcp.@dnsmasq[0].address ; echo
   register: conf
 
 - name: Resolv domain and sub-domaine to AP ip address
-  command: uci add_list dhcp.@dnsmasq[0].address='/{{project_type}}/192.168.1.1'
+  command: uci add_list dhcp.@dnsmasq[0].address='/{{project_domain_name}}/192.168.1.1'
   when: conf.stdout == ""
 
 - name: Change nodogsplash URL to redirect to
-  command: uci set nodogsplash.@instance[0].redirecturl='http://{{project_type}}'
+  command: uci set nodogsplash.@instance[0].redirecturl='http://{{project_domain_name}}'
 
 - name: Set gateway name
-  command: uci set nodogsplash.@instance[0].gatewayname='{{project_type}}'
+  command: uci set nodogsplash.@instance[0].gatewayname='{{project_domain_name}}'
 
 - name: Enable nodogsplash
   command: uci set nodogsplash.@instance[0].enabled='0'
 
 - name: Set hostname
-  command: uci set system.@system[0].hostname='{{project_type}}'
+  command: uci set system.@system[0].hostname='{{project_domain_name}}'
 
 - name: Set system wide hostname
   shell: echo {{ full_device_name }} > /etc/hostname

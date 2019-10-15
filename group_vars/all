@@ -14,3 +14,4 @@ local_cache_server: "koombook-doctor.local"
 bsf_gateway: "10.10.9.1"
 ideascube_api_service: "tincmaster.bsf-intranet.org:42685"
 callback_fullpath: /bin/true
+project_domain_name: ideascube.io
