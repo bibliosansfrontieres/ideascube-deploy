@@ -90,10 +90,10 @@
   command: uci set system.@system[0].timezone='{{ timezone }}'
 
 - name: Change SSID for 2.4Ghz
-  command: uci set wireless.@wifi-iface[0].ssid='{{full_device_name}}-2.4G'
+  command: uci set wireless.@wifi-iface[0].ssid='_{{full_device_name}}-2.4G'
 
 - name: Change SSID for 5Ghz
-  command: uci set wireless.@wifi-iface[1].ssid='{{full_device_name}}-5G'
+  command: uci set wireless.@wifi-iface[1].ssid='_{{full_device_name}}-5G'
 
 - name: Commit changes
   command: uci commit {{item}}
