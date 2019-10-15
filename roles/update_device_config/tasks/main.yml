@@ -93,7 +93,7 @@
   command: uci set nodogsplash.@instance[0].gatewayname='{{project_type}}'
 
 - name: Enable nodogsplash
-  command: uci set nodogsplash.@instance[0].enabled='1'
+  command: uci set nodogsplash.@instance[0].enabled='0'
 
 - name: Set hostname
   command: uci set system.@system[0].hostname='{{project_type}}'
