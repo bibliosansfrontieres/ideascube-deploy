@@ -22,6 +22,8 @@
     - { src: 'ideascube.ini', dest: '/media/hdd/config-files/uwsgi/ideascube.ini' }
     - { src: 'uwsgi_params', dest: '/media/hdd/ideascube/'}
     - { src: '45-pull-containers', dest: '/etc/hotplug.d/iface/45-pull-containers'}
+  tags:
+    - pull_container
 
 - name: Copy configuration templates
   template:
@@ -29,6 +31,8 @@
     dest: "{{ item.dest }}"
   with_items:
     - { src: 'default.conf.j2', dest: '/media/hdd/config-files/nginx/default.conf' }
+  tags:
+    - pull_container
 
 - include: traefik.yml
 
