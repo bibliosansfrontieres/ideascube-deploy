@@ -1,12 +1,6 @@
 FROM i386/debian:jessie-slim
 
-## Set LOCALE to UTF8
-#
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen en_US.UTF-8 && \
-    dpkg-reconfigure locales && \
-    /usr/sbin/update-locale LANG=en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /home/ideascube/
 
@@ -14,6 +8,7 @@ RUN \
   apt update -q; \
   apt full-upgrade --purge -q -y; \
   apt install -q -y --no-install-recommends \
+    locales \
     autoconf \
     automake \
     cython3 \
@@ -35,6 +30,14 @@ RUN \
   rm -fr \
     /usr/share/doc/* \
     /var/cache/debconf/*
+
+## Set LOCALE to UTF8
+#
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen en_US.UTF-8 && \
+    dpkg-reconfigure locales && \
+    /usr/sbin/update-locale LANG=en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 
 RUN git clone https://framagit.org/ideascube/ideascube.git /home/ideascube/
 
