@@ -38,6 +38,7 @@
   set_fact:
     hostname: "{{ project_name }}"
     full_device_name: "{{ project_name }}-{{ ansible_default_ipv4.macaddress[11:17] | replace(':', '') }}"
+    hotspot_name: "_ideascube-{{ ansible_default_ipv4.macaddress[11:17] | replace(':', '') }}"
 
 - debug: msg="Start playbook {{ ansible_date_time["date"] }} - {{ ansible_date_time["time"] }} - I'm a {{ project_domain_name }} / {{full_device_name}}"
 
@@ -90,10 +91,10 @@
   command: uci set system.@system[0].timezone='{{ timezone }}'
 
 - name: Change SSID for 2.4Ghz
-  command: uci set wireless.@wifi-iface[0].ssid='_{{full_device_name}}-2.4G'
+  command: uci set wireless.@wifi-iface[0].ssid='{{hotspot_name}}'
 
 - name: Change SSID for 5Ghz
-  command: uci set wireless.@wifi-iface[1].ssid='_{{full_device_name}}-5G'
+  command: uci set wireless.@wifi-iface[1].ssid='{{hotspot_name}}-5G'
 
 - name: Commit changes
   command: uci commit {{item}}
