@@ -55,7 +55,7 @@
 - name: Populate hosts file
   lineinfile:
     dest: /etc/hosts
-    line: '192.168.1.1 {{ project_domain_name }} kiwix.{{ project_domain_name }} kolibri.{{ project_domain_name }} sites.{{ project_domain_name }} bsfcampus.{{ project_domain_name }}'
+    line: '192.168.123.1 {{ project_domain_name }} kiwix.{{ project_domain_name }} kolibri.{{ project_domain_name }} sites.{{ project_domain_name }} bsfcampus.{{ project_domain_name }}'
 
 - name: Switch to FDN DNS server
   command: uci set dhcp.@dnsmasq[0].server='80.67.169.12'
@@ -68,7 +68,7 @@
   register: conf
 
 - name: Resolv domain and sub-domaine to AP ip address
-  command: uci add_list dhcp.@dnsmasq[0].address='/{{project_domain_name}}/192.168.1.1'
+  command: uci add_list dhcp.@dnsmasq[0].address='/{{project_domain_name}}/192.168.123.1'
   when: conf.stdout == ""
 
 - name: Change nodogsplash URL to redirect to
