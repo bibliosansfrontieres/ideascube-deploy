@@ -7,8 +7,8 @@
 
 - name: Copy check cache server script
   template:
-    src: "49-cache-server"
-    dest: "/etc/hotplug.d/iface/49-cache-server"
+    src: "40-cache-server"
+    dest: "/etc/hotplug.d/iface/40-cache-server"
     mode: 0755
 
 - include: ideascube.yml
