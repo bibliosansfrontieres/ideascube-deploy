@@ -6,7 +6,7 @@ ANSIBLE_BIN="/usr/bin/ansible-pull"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="master"
-GIT_RELEASE_TAG="1.6"
+GIT_RELEASE_TAG="1.6.1"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
