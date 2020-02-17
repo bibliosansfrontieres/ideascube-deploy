@@ -8,6 +8,6 @@
 
   if expr "$kb_doctor_ip" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null;
   then
-    /usr/local/bin/balena-engine exec ideascube sh -c 'LANG=C.UTF-8 echo '$kb_doctor_ip' {{ local_cache_server }} download.kiwix.org packages.ideascube.org >> /etc/hosts'
+    /usr/local/bin/balena-engine exec ideascube sh -c 'LANG=C.UTF-8 echo '$kb_doctor_ip' {{ local_cache_server }} kiwix.ideascube.org packages.ideascube.org >> /etc/hosts'
   fi
 }
