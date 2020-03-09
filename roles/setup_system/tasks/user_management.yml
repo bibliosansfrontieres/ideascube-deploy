@@ -16,8 +16,8 @@
     key: "{{ item }}"
   with_file:
     - florian.pub
+    - gregoire.pub
     - tom.pub
-    - steven.pub
 
 - name: Set up authorized_keys for root user
   authorized_key:
@@ -25,5 +25,5 @@
     key: "{{ item }}"
   with_file:
     - florian.pub
+    - gregoire.pub
     - tom.pub
-    - steven.pub
