@@ -2,7 +2,8 @@
 
 ANSIBLECAP_PATH="/var/lib/ansible/local"
 GIT_REPO_URL="https://github.com/bibliosansfrontieres/ideascube-deploy.git"
-ANSIBLE_BIN="/usr/bin/ansible-pull"
+ANSIBLE_INSTALL_METHOD="${ANSIBLE_INSTALL_METHOD:-pip}" # pip / ppa
+ANSIBLE_PIP_VERSION="${ANSIBLE_PIP_VERSION:-2.9.6}"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="${BRANCH:-master}"
@@ -12,6 +13,8 @@ GIT_RELEASE_TAG="1.6.3"
     echo "Error: you have to be root to run this script." >&2
     exit 1
 }
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 
 function internet_check()
 {
@@ -26,15 +29,42 @@ function internet_check()
 
 function install_ansible()
 {
-    echo -n "[+] Updating APT cache... "
+    echo "[+] Updating APT cache... "
     internet_check
     apt-get update --quiet --quiet
+    echo "[+] Install common tools... "
+    apt-get install --quiet --quiet -y git lsb-release jq
     echo 'Done.'
 
-    echo -n "[+] Install ansible... "
-    apt-get install --quiet --quiet -y software-properties-common git lsb-release jq
+    case $ANSIBLE_INSTALL_METHOD in
+        "ppa") 
+            install_ansible_from_ppa
+            ;;
+        "pip")
+            install_ansible_from_pip
+            ;;
+        *)
+            >&2 echo "Error: \$ANSIBLE_INSTALL_METHOD is invalid (${ANSIBLE_INTALL_METHOD}). Aborting."
+            exit 1
+            ;;
+    esac
+}
+
+function install_ansible_from_ppa()
+{
+    echo "[+] Install ansible from PPA... "
+    apt-get install --quiet --quiet -y software-properties-common
     apt-add-repository --yes --update ppa:ansible/ansible
     apt-get install --quiet --quiet -y ansible
+    echo 'Done.'
+}
+
+
+function install_ansible_from_pip()
+{
+    echo -n "[+] Install ansible from PIP... "
+    apt-get install --quiet --quiet -y python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources libffi-dev libssl-dev dialog
+    pip install ansible==${ANSIBLE_PIP_VERSION}
     echo 'Done.'
 }
 
@@ -54,7 +84,7 @@ function clone_ansiblecube()
     echo 'Done.'
 }
 
-[ -x ${ANSIBLE_BIN} ] || install_ansible
+[ -x /usr/bin/ansible -a -x /usr/local/bin/ansible ] || install_ansible
 [ -d ${ANSIBLECAP_PATH} ] || clone_ansiblecube
 
 echo "Checking file access" >> /var/log/ansible-pull.log
@@ -124,7 +154,7 @@ purge_switch=""
 
 cd $ANSIBLECAP_PATH
 
-echo "$ANSIBLE_BIN $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "\n[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
-$ANSIBLE_BIN $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $EXTRA_VARS2 $TAGS
+ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $EXTRA_VARS2 $TAGS
