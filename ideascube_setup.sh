@@ -54,7 +54,7 @@ function clone_ansiblecube()
     echo 'Done.'
 }
 
-[ -x /usr/bin/ansible ] || install_ansible
+[ -x ${ANSIBLE_BIN} ] || install_ansible
 [ -d ${ANSIBLECAP_PATH} ] || clone_ansiblecube
 
 echo "Checking file access" >> /var/log/ansible-pull.log
