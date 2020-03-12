@@ -1,3 +1,5 @@
 hosts
 main.retry
 hugo
+# py.test cache
+tests/__pycache__/
