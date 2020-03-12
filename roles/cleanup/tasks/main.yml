@@ -39,15 +39,15 @@
     purge: yes
   vars:
     packages:
-    - nginx
-    - contenthub-usb
-    - intel-content-hub
     - apport
     - cloud-guest-utils
     - cloud-initramfs-copymods
     - cloud-initramfs-dyn-netconf
     - comgt
+    - contenthub-usb
     - erlang-base
+    - intel-content-hub
+    - nginx
     - nginx-common
     - nginx-light
     - ppp
@@ -59,30 +59,28 @@
     name: "{{ item }}"
     state: absent
   with_items:
-   - /etc/nginx/
-   - /lib/systemd/system/contenthub-usb.service
-   - /lib/systemd/system/uhttpd.service
-   - /lib/systemd/system/rabbitmq-server.service
-   - /etc/django-fastcgi
-   - /etc/init.d/celeryd
-   - /etc/init.d/django-fastcgi
-   - /etc/init.d/nginx
-   - /etc/init.d/rabbitmq-server
-   - /var/www/
-   - /media/uploaded
-   - /media/preloaded/
-   - /customize_brand/
-   - /etc/celeryd.default
-   - /etc/celeryd.init
-   - /etc/config-backup.tar.gz
-   - /etc/config-backup.tar.gz.dpkg-old
-   - /etc/django-fastcgi
-   - /etc/nginx/
-   - /etc/nginx.conf
-   - /etc/nginx.default
-   - /etc/rabbitmq/
-   - /srv/
-   - /etc/hotplug.d/iface/90-ar2f
-   - /etc/udev/rules.d/81-modem.rules
-   - /var/lib/ansible/local/20-firewall
-   - /var/lib/ansible/local/25-dnsmasq
+    - /customize_brand/
+    - /etc/celeryd.default
+    - /etc/celeryd.init
+    - /etc/config-backup.tar.gz
+    - /etc/config-backup.tar.gz.dpkg-old
+    - /etc/django-fastcgi
+    - /etc/hotplug.d/iface/90-ar2f
+    - /etc/init.d/celeryd
+    - /etc/init.d/django-fastcgi
+    - /etc/init.d/nginx
+    - /etc/init.d/rabbitmq-server
+    - /etc/nginx/
+    - /etc/nginx.conf
+    - /etc/nginx.default
+    - /etc/rabbitmq/
+    - /etc/udev/rules.d/81-modem.rules
+    - /lib/systemd/system/contenthub-usb.service
+    - /lib/systemd/system/rabbitmq-server.service
+    - /lib/systemd/system/uhttpd.service
+    - /media/preloaded/
+    - /media/uploaded
+    - /srv/
+    - /var/lib/ansible/local/20-firewall
+    - /var/lib/ansible/local/25-dnsmasq
+    - /var/www/
