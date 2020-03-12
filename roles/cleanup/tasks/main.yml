@@ -32,7 +32,7 @@
     - firewall
     - nodogsplash
 
-- name: Remove unwanted packages
+- name: Remove unwanted packages before upgrading
   apt:
     name: "{{ packages }}"
     state: absent
@@ -65,15 +65,21 @@
     - /etc/config-backup.tar.gz
     - /etc/config-backup.tar.gz.dpkg-old
     - /etc/django-fastcgi
+    - /etc/hotplug.d/iface/40-balena-engine
     - /etc/hotplug.d/iface/90-ar2f
     - /etc/init.d/celeryd
     - /etc/init.d/django-fastcgi
     - /etc/init.d/nginx
     - /etc/init.d/rabbitmq-server
+    - /etc/init.d/resethostname.sh
+    - /etc/logrotate.d/nginx
+    - /etc/logrotate.d/ppp
+    - /etc/logrotate.d/rabbitmq-server
     - /etc/nginx/
     - /etc/nginx.conf
     - /etc/nginx.default
     - /etc/rabbitmq/
+    - /etc/udev/rules.d/80-uploaded.rules
     - /etc/udev/rules.d/81-modem.rules
     - /lib/systemd/system/contenthub-usb.service
     - /lib/systemd/system/rabbitmq-server.service
