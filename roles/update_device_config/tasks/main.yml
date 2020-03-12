@@ -101,6 +101,12 @@
 - name: Set system wide hostname
   shell: echo {{ full_device_name }} > /etc/hostname
 
+- name: Fix local hostname resolution
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: '127.0.1.1 {{ full_device_name }}'
+
 - name: Set timezone
   command: uci set system.@system[0].timezone='{{ timezone }}'
 
