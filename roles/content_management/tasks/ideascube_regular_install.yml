@@ -1,15 +1,15 @@
 ---
-- name: Check if DB has been created
+- name: ideascube regular install - Check if DB has been created
   stat:
     path: /media/hdd/ideascube/main/default.sqlite
   register: stat_db
 
-- name: Check if remotes exist
+- name: ideascube regular install - Check if remotes exist
   stat:
     path: /media/hdd/ideascube/main/catalog/remotes/Omeka.json
   register: stat_remote
 
-- name: Initialize ideascube database & collectstatic
+- name: ideascube regular install - Initialize ideascube database & collectstatic
   command: balena-engine exec {{ containers[ideascube_index].name }} ideascube {{item}}
   with_items:
     - "migrate --database=default"
@@ -17,7 +17,7 @@
     - "collectstatic --noinput"
   when: stat_db.stat.exists == False
 
-- name: Install Ideascube catalogs
+- name: ideascube regular install - Install Ideascube catalogs
   command: balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog remotes add "{{ item.name }}" "{{ item.description }}" "{{ item.url }}"
   with_items:
   - name: "Kiwix"
@@ -34,10 +34,10 @@
     url: http://catalog.ideascube.org/omeka.yml
   when: stat_remote.stat.exists == False
 
-- name: Update ideascube catalog cache before downloading
+- name: ideascube regular install - Update ideascube catalog cache before downloading
   command: balena-engine exec {{ containers[ideascube_index].name }} ideascube catalog cache update
 
-- name: Install, upgrade or remove a package present in device.json
+- name: ideascube regular install - Install, upgrade or remove a package present in device.json
   include: install_package.yml
   with_items: '{{ containers[ideascube_index].content }}'
   notify: Restart Kiwix
