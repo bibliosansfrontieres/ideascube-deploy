@@ -21,7 +21,7 @@
     - { src: 'nginx.conf', dest: '/media/hdd/config-files/nginx/nginx.conf' }
     - { src: 'ideascube.ini', dest: '/media/hdd/config-files/uwsgi/ideascube.ini' }
     - { src: 'uwsgi_params', dest: '/media/hdd/ideascube/'}
-    - { src: '45-pull-containers', dest: '/etc/hotplug.d/iface/45-pull-containers'}
+    - { src: '45-pull-containers', dest: '/etc/hotplug.d/iface/45-pull-containers, mode: 0755}
 
 - name: Copy configuration templates
   template:
