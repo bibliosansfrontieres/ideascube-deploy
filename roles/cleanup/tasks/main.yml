@@ -39,17 +39,17 @@
     name: "{{ item }}"
     state: absent
   with_items:
-   - /etc/nginx/
-   - /etc/init.d/resethostname.sh
-   - /lib/systemd/system/contenthub-usb.service
-   - /lib/systemd/system/uhttpd.service
-   - /lib/systemd/system/rabbitmq-server.service
-   - /etc/django-fastcgi
-   - /srv/
-   - /etc/hotplug.d/iface/90-ar2f
-   - /etc/hotplug.d/iface/40-balena-engine
-   - /etc/logrotate.d/ppp
-   - /etc/logrotate.d/rabbitmq-server
-   - /etc/logrotate.d/nginx
-   - /etc/udev/rules.d/80-uploaded.rules
-   - /etc/udev/rules.d/81-modem.rules
+    - /etc/django-fastcgi
+    - /etc/hotplug.d/iface/40-balena-engine
+    - /etc/hotplug.d/iface/90-ar2f
+    - /etc/init.d/resethostname.sh
+    - /etc/logrotate.d/nginx
+    - /etc/logrotate.d/ppp
+    - /etc/logrotate.d/rabbitmq-server
+    - /etc/nginx/
+    - /etc/udev/rules.d/80-uploaded.rules
+    - /etc/udev/rules.d/81-modem.rules
+    - /lib/systemd/system/contenthub-usb.service
+    - /lib/systemd/system/rabbitmq-server.service
+    - /lib/systemd/system/uhttpd.service
+    - /srv/
