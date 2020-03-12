@@ -21,15 +21,14 @@
         && {{ kolibri_bin }} manage importcontent disk {{ language[item] }} /root/.kolibri/kawax/khan/{{ item }}/
       with_items: "{{ containers[kolibri_index].channel_id | default('fr') }}"
 
+    - name: kolibri - umount local cache server
+      mount:
+        name: /media/hdd/kolibri/kawax
+        state: absent
+
   rescue:
     - name: kolibri - Import channels and content from Internet
       raw: >
         {{ kolibri_bin }} manage importchannel -- network {{ language[item] }}
         && {{ kolibri_bin }} manage importcontent -- network {{ language[item] }}
       with_items: "{{ containers[kolibri_index].channel_id | default('fr') }}"
-
-  always:
-    - name: kolibri- umount local cache server
-      mount:
-        name: /media/hdd/kolibri/kawax
-        state: absent
