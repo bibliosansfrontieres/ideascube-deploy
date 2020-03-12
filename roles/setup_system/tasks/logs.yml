@@ -37,19 +37,19 @@
   copy:
     src: hdw_info.sh
     dest: /usr/local/bin/hdw_info.sh
-    mode: 755
+    mode: 0755
 
 - name: Copy push_log.sh
   template:
     src: push_log.sh.j2
     dest: /etc/hotplug.d/iface/60-push-log
-    mode: 755
+    mode: 0755
 
 - name: copy idcstats script
   copy:
     src: idcstats.sh
     dest: /usr/local/bin/idcstats.sh
-    mode: 755
+    mode: 0755
 
 - name: Add a cron entry to run the idcstats script
   cron:
@@ -63,7 +63,7 @@
   copy:
     src: apt-user-agent.conf
     dest: /etc/apt/apt.conf.d/99useragent
-    mode: 755
+    mode: 0755
 
 - name: Ensure Anacron will run on battery
   lineinfile:
