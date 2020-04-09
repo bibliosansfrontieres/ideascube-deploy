@@ -87,7 +87,7 @@ function clone_ansiblecube()
 [ -x /usr/bin/ansible -a -x /usr/local/bin/ansible ] || install_ansible
 [ -d ${ANSIBLECAP_PATH} ] || clone_ansiblecube
 
-echo "Checking file access" >> /var/log/ansible-pull.log
+echo "$( date ) - Checking file access. Args: $*" >> /var/log/ansible-pull.log
 [ $? -ne 0 ] && echo "No space left to write logs or permission problem, exiting." && exit 1
 
 while [[ $# -gt 0 ]]
