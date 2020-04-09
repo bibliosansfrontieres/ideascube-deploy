@@ -3,7 +3,7 @@
 . $IPKG_INSTROOT/lib/functions.sh                                                                                                                                                                                                                                      [640/959]
 . $IPKG_INSTROOT/lib/functions/network.sh
 
-PROJECT_NAME=$(hostname | cut -d "-" -f1,2,3)
+PROJECT_NAME=$( jq '.project_name' /etc/ansible/facts.d/device_configuration.fact )
 
 [ "$ACTION" = ifup ] || exit 0
 
