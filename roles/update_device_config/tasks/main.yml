@@ -159,4 +159,9 @@
     dest: "/etc/hotplug.d/iface/50-update-content"
     mode: 0755
 
+- name: Copy pull containers script
+  copy:
+    src: "45-pull-containers"
+    dest: "/etc/hotplug.d/iface/45-pull-containers"
+    mode: 0755
 
