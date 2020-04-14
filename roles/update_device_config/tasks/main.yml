@@ -152,3 +152,16 @@
   template:
     src: "25-dnsmasq.j2"
     dest: /etc/hotplug.d/iface/25-dnsmasq
+
+- name: Copy update content script
+  copy:
+    src: "50-update-content"
+    dest: "/etc/hotplug.d/iface/50-update-content"
+    mode: 0755
+
+- name: Copy pull containers script
+  copy:
+    src: "45-pull-containers"
+    dest: "/etc/hotplug.d/iface/45-pull-containers"
+    mode: 0755
+
