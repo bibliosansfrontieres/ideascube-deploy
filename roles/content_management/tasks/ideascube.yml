@@ -1,7 +1,9 @@
 ---
 - name: ideascube - Send start notification.
   command: "{{ callback_fullpath }} 'Starting file copy, this can take quite some time. Go and grab a cup of tea.' {{ ansible_local.device_configuration.process_id }}"
-
+  tags:
+  - update_content
+ 
 - name: ideascube - Try to synchronize data from local server
   block:
     - name: ideascube - mount local cache server
