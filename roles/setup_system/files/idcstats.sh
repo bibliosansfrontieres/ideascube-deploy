@@ -48,4 +48,5 @@ blogpublished=$( squery "select count(*) from blog_content where status = 2" )
 blogdeleted=$(   squery "select count(*) from blog_content where status = 3" )
 
 # send this to syslog - no need of a separated file, use grep/awk/whatever
-logger --tag idcstats "$users users, $staff staffs, $medias medias, $tags tags, $blogposts blogposts, $blogdrafts blogdrafts, $blogpublished blogpublished, $blogdeleted blogdeleted, $books books"
+echo "$users users, $staff staffs, $medias medias, $tags tags, $blogposts blogposts, $blogdrafts blogdrafts, $blogpublished blogpublished, $blogdeleted blogdeleted, $books books" \
+    | systemd-cat -p info -t idcstats
