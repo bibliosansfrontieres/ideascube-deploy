@@ -87,7 +87,7 @@ function clone_ansiblecube()
 [ -d ${ANSIBLECAP_PATH} ] || clone_ansiblecube
 
 echo "$( date ) - Checking file access. Args: $*" >> /var/log/ansible-pull.log
-[ $? -ne 0 ] && echo "[+] No space left to write logs or permission problem, exiting." && exit 1
+[ $? -ne 0 ] && echo "[+] No space left to write logs or permission problem, exiting." >&2 && exit 1
 
 while [[ $# -gt 0 ]]
 do
@@ -111,7 +111,7 @@ do
 
             if [ -z "$2" ]
             then
-                echo -e "\n\t[+] ERROR\n\t--name : Missing device name\n"
+                echo -e "\n\t[+] ERROR\n\t--name : Missing device name\n" >&2
 
                 exit 0;
             fi
