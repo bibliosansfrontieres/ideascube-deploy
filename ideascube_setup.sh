@@ -18,7 +18,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/b
 
 function internet_check()
 {
-    echo -n "[+] Check Internet connection... "
+    echo -n "[+] Check Internet connection..."
     if [[ ! $( ping -q -c 2 github.com ) ]]
     then
         echo "ERROR: Repository is unreachable, check your Internet connection." >&2
@@ -29,10 +29,10 @@ function internet_check()
 
 function install_ansible()
 {
-    echo "[+] Updating APT cache... "
+    echo "[+] Updating APT cache..."
     internet_check
     apt-get update --quiet --quiet
-    echo "[+] Install common tools... "
+    echo "[+] Install common tools..."
     apt-get install --quiet --quiet -y git lsb-release jq
     echo '[+] Done.'
 
@@ -52,7 +52,7 @@ function install_ansible()
 
 function install_ansible_from_ppa()
 {
-    echo "[+] Install ansible from PPA... "
+    echo "[+] Install ansible from PPA..."
     apt-get install --quiet --quiet -y software-properties-common
     apt-add-repository --yes --update ppa:ansible/ansible
     apt-get install --quiet --quiet -y ansible
@@ -62,7 +62,7 @@ function install_ansible_from_ppa()
 
 function install_ansible_from_pip()
 {
-    echo "[+] Install ansible from PIP... "
+    echo "[+] Install ansible from PIP..."
     apt-get install --quiet --quiet -y python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources libffi-dev libssl-dev dialog
     # shellcheck disable=SC2086
     pip install ansible==${ANSIBLE_PIP_VERSION}
@@ -71,10 +71,10 @@ function install_ansible_from_pip()
 
 function clone_ansiblecube()
 {
-    echo "[+] Checking for internet connectivity... "
+    echo "[+] Checking for internet connectivity..."
     internet_check
 
-    echo "[+] Clone ansiblecap repo... "
+    echo "[+] Clone ansiblecap repo..."
     mkdir --mode 0755 -p ${ANSIBLECAP_PATH}
     cd ${ANSIBLECAP_PATH}/../
     git clone ${GIT_REPO_URL} local
@@ -154,7 +154,7 @@ purge_switch=""
 cd $ANSIBLECAP_PATH
 
 echo "[+] Running: ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
-echo -e "\n[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
+echo -e "\n[+] Start configuration... Follow logs : tail -f /var/log/ansible-pull.log"
 
 # shellcheck disable=SC2086
 ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $EXTRA_VARS2 $TAGS
