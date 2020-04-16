@@ -19,7 +19,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/b
 function internet_check()
 {
     echo -n "[+] Check Internet connection... "
-    if [[ ! `ping -q -c 2 github.com` ]]
+    if [[ ! $( ping -q -c 2 github.com ) ]]
     then
         echo "ERROR: Repository is unreachable, check your Internet connection." >&2
         exit 101  # ENETUNREACH
@@ -64,6 +64,7 @@ function install_ansible_from_pip()
 {
     echo "[+] Install ansible from PIP... "
     apt-get install --quiet --quiet -y python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources libffi-dev libssl-dev dialog
+    # shellcheck disable=SC2086
     pip install ansible==${ANSIBLE_PIP_VERSION}
     echo '[+] Done.'
 }
@@ -137,7 +138,7 @@ done
 
 echo -n "[+] Retrieve device configuration from API..."
 apt-get install --quiet --quiet -y jq
-result_from_api=`curl -s http://tincmaster.bsf-intranet.org:42685/projects?project_name=$PROJECT_NAME |jq ".[]"`
+result_from_api=$( curl -s "http://tincmaster.bsf-intranet.org:42685/projects?project_name=$PROJECT_NAME" |jq ".[]" )
 
 if [ -z "$result_from_api" ]
 then
@@ -145,7 +146,7 @@ then
   exit 19  # ENODEV
 fi
 
-echo $result_from_api > /etc/ansible/facts.d/device_configuration.fact
+echo "$result_from_api" > /etc/ansible/facts.d/device_configuration.fact
 
 purge_switch=""
 [ "$BRANCH" == "master" ] && purge_switch="--purge"
@@ -155,4 +156,5 @@ cd $ANSIBLECAP_PATH
 echo "[+] Running: ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "\n[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
+# shellcheck disable=SC2086
 ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $EXTRA_VARS2 $TAGS
