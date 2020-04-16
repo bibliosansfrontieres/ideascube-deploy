@@ -5,7 +5,7 @@ GIT_REPO_URL="https://github.com/bibliosansfrontieres/ideascube-deploy.git"
 ANSIBLE_INSTALL_METHOD="${ANSIBLE_INSTALL_METHOD:-pip}" # pip / ppa
 ANSIBLE_PIP_VERSION="${ANSIBLE_PIP_VERSION:-2.9.6}"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
-TAGS=""
+PLAYBOOK_TAGS=""
 BRANCH="${BRANCH:-master}"
 
 [ $EUID -eq 0 ] || {
@@ -96,11 +96,11 @@ do
 
             case $2 in
                 "containers")
-                    TAGS="--tags pull_container"
+                    PLAYBOOK_TAGS="--tags pull_container"
                 ;;
 
                 "content")
-                    TAGS="--tags update_content"
+                    PLAYBOOK_TAGS="--tags update_content"
                 ;;
             esac
 
@@ -123,7 +123,7 @@ do
 
             if [ -n "$2" ]
             then
-                EXTRA_VARS2="--extra-vars $2"
+                CUSTOM_EXTRA_VARS="--extra-vars $2"
             fi
 
         shift
@@ -152,8 +152,8 @@ purge_switch=""
 
 cd $ANSIBLECAP_PATH
 
-echo "[+] Running: ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "[+] Running: ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $CUSTOM_EXTRA_VARS $PLAYBOOK_TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "\n[+] Start configuration... Follow logs : tail -f /var/log/ansible-pull.log"
 
 # shellcheck disable=SC2086
-ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $EXTRA_VARS2 $TAGS
+ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $CUSTOM_EXTRA_VARS $PLAYBOOK_TAGS
