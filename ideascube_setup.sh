@@ -24,7 +24,7 @@ function internet_check()
         echo "ERROR: Repository is unreachable, check your Internet connection." >&2
         exit 1
     fi
-    echo "Done."
+    echo "[+] Done."
 }
 
 function install_ansible()
@@ -34,7 +34,7 @@ function install_ansible()
     apt-get update --quiet --quiet
     echo "[+] Install common tools... "
     apt-get install --quiet --quiet -y git lsb-release jq
-    echo 'Done.'
+    echo '[+] Done.'
 
     case $ANSIBLE_INSTALL_METHOD in
         "ppa") 
@@ -56,39 +56,38 @@ function install_ansible_from_ppa()
     apt-get install --quiet --quiet -y software-properties-common
     apt-add-repository --yes --update ppa:ansible/ansible
     apt-get install --quiet --quiet -y ansible
-    echo 'Done.'
+    echo '[+] Done.'
 }
 
 
 function install_ansible_from_pip()
 {
-    echo -n "[+] Install ansible from PIP... "
+    echo "[+] Install ansible from PIP... "
     apt-get install --quiet --quiet -y python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources libffi-dev libssl-dev dialog
     pip install ansible==${ANSIBLE_PIP_VERSION}
-    echo 'Done.'
+    echo '[+] Done.'
 }
 
 function clone_ansiblecube()
 {
-    echo -n "[+] Checking for internet connectivity... "
+    echo "[+] Checking for internet connectivity... "
     internet_check
-    echo 'Done.'
 
-    echo -n "[+] Clone ansiblecap repo... "
+    echo "[+] Clone ansiblecap repo... "
     mkdir --mode 0755 -p ${ANSIBLECAP_PATH}
     cd ${ANSIBLECAP_PATH}/../
     git clone ${GIT_REPO_URL} local
 
     mkdir --mode 0755 -p ${ANSIBLE_ETC}
     cp ${ANSIBLECAP_PATH}/hosts /etc/ansible/hosts
-    echo 'Done.'
+    echo '[+] Done.'
 }
 
 [ -x /usr/bin/ansible -a -x /usr/local/bin/ansible ] || install_ansible
 [ -d ${ANSIBLECAP_PATH} ] || clone_ansiblecube
 
 echo "$( date ) - Checking file access. Args: $*" >> /var/log/ansible-pull.log
-[ $? -ne 0 ] && echo "No space left to write logs or permission problem, exiting." && exit 1
+[ $? -ne 0 ] && echo "[+] No space left to write logs or permission problem, exiting." && exit 1
 
 while [[ $# -gt 0 ]]
 do
@@ -136,7 +135,7 @@ do
     shift
 done
 
-echo -n "[+] Retrieve device configuration from API"
+echo -n "[+] Retrieve device configuration from API..."
 apt-get install --quiet --quiet -y jq
 result_from_api=`curl -s http://tincmaster.bsf-intranet.org:42685/projects?project_name=$PROJECT_NAME |jq ".[]"`
 
@@ -153,7 +152,7 @@ purge_switch=""
 
 cd $ANSIBLECAP_PATH
 
-echo "ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
+echo "[+] Running: ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars \"@/etc/ansible/facts.d/device_configuration.fact\" $EXTRA_VARS2 $TAGS" >> /var/lib/ansible/ansible-pull-cmd-line.sh
 echo -e "\n[+] Start configuration...follow logs : tail -f /var/log/ansible-pull.log"
 
 ansible-pull $purge_switch -C $BRANCH -d $ANSIBLECAP_PATH -i hosts -U $GIT_REPO_URL main.yml --extra-vars "@/etc/ansible/facts.d/device_configuration.fact" $EXTRA_VARS2 $TAGS
