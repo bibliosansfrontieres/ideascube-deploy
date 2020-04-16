@@ -11,7 +11,7 @@ GIT_RELEASE_TAG="1.6.3"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
-    exit 1
+    exit 13  # EACCES
 }
 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
@@ -22,7 +22,7 @@ function internet_check()
     if [[ ! `ping -q -c 2 github.com` ]]
     then
         echo "ERROR: Repository is unreachable, check your Internet connection." >&2
-        exit 1
+        exit 101  # ENETUNREACH
     fi
     echo "[+] Done."
 }
@@ -45,7 +45,7 @@ function install_ansible()
             ;;
         *)
             >&2 echo "Error: \$ANSIBLE_INSTALL_METHOD is invalid (${ANSIBLE_INTALL_METHOD}). Aborting."
-            exit 1
+            exit 22  #EINVAL
             ;;
     esac
 }
@@ -87,7 +87,7 @@ function clone_ansiblecube()
 [ -d ${ANSIBLECAP_PATH} ] || clone_ansiblecube
 
 echo "$( date ) - Checking file access. Args: $*" >> /var/log/ansible-pull.log
-[ $? -ne 0 ] && echo "[+] No space left to write logs or permission problem, exiting." >&2 && exit 1
+[ $? -ne 0 ] && echo "[+] No space left to write logs or permission problem, exiting." >&2 && exit 28  # ENOSPC
 
 while [[ $# -gt 0 ]]
 do
@@ -113,7 +113,7 @@ do
             then
                 echo -e "\n\t[+] ERROR\n\t--name : Missing device name\n" >&2
 
-                exit 0;
+                exit 22;  # EINVAL
             fi
             PROJECT_NAME=$2
 
@@ -142,7 +142,7 @@ result_from_api=`curl -s http://tincmaster.bsf-intranet.org:42685/projects?proje
 if [ -z "$result_from_api" ]
 then
   echo -e "\n[+] ERROR ==> This project name : $PROJECT_NAME does not exist\n"
-  exit 1;
+  exit 19  # ENODEV
 fi
 
 echo $result_from_api > /etc/ansible/facts.d/device_configuration.fact
