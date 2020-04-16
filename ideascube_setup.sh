@@ -7,7 +7,6 @@ ANSIBLE_PIP_VERSION="${ANSIBLE_PIP_VERSION:-2.9.6}"
 ANSIBLE_ETC="/etc/ansible/facts.d/"
 TAGS=""
 BRANCH="${BRANCH:-master}"
-GIT_RELEASE_TAG="1.6.3"
 
 [ $EUID -eq 0 ] || {
     echo "Error: you have to be root to run this script." >&2
