@@ -37,17 +37,17 @@
 - name: Guess if project type is ideasbox
   set_fact:
     project_type: ideasbox
-  when: project_name | regex_search('(idb)') == "idb"
+  when: project_name | regex_search('(^idb)') == "idb"
 
 - name: Guess if project type is KoomBook
   set_fact:
     project_type: koombook
-  when: project_name | regex_search('(kb)') == "kb"
+  when: project_name | regex_search('(^kb)') == "kb"
 
 - name: Guess if project type is Ideascube
   set_fact:
     project_type: ideascube
-  when: project_name | regex_search('(idc)') == "idc"
+  when: project_name | regex_search('(^idc)') == "idc"
 
 - name: Set device name variable
   set_fact:
