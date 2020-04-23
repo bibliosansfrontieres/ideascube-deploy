@@ -7,7 +7,7 @@
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[kolibri_index].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[kolibri_index].name }}.ideascube"
     volumes: "/media/hdd/kolibri:/root/.kolibri/"
   tags:
     - pull_container

@@ -7,7 +7,7 @@
     restart_policy: always
     state: started
     pull: yes
-    labels: "traefik.frontend.rule=Host:{{ containers[kiwix_index].name }}.{{project_type}}"
+    labels: "traefik.frontend.rule=Host:{{ containers[kiwix_index].name }}.ideascube"
     volumes: "/media/hdd/ideascube/kiwix:/var/ideascube/kiwix"
   tags:
     - pull_container
