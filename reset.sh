@@ -38,10 +38,10 @@ rm -rf /var/lib/balena-engine/
 rm -f /var/spool/cron/crontabs/root
 rm -f /opt/*
 
-# Force umount the HDD
-umount -A -l /dev/sda1
 
-# Format the partition
+# Clean data
+rm -f /data
+umount -A -l /dev/sda1
 mkfs.ext4 -F /dev/sda1
 
 # Shutdown the device
