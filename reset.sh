@@ -6,8 +6,8 @@
 cd / && tar xvf /etc/factory-config.tgz
 
 # get eth first mac and get the laste 2 numbers
-addr=`find /sys/class/net/ | grep -m1 'enp2s0'`
-emac=`cat $addr/address | awk -F":" '{ print $5 $6 }'`
+addr=$( find /sys/class/net/ | grep -m1 'enp2s0' )
+emac=$( awk -F":" '{ print $5 $6 }' "$addr/address" )
 
 # Set a default hostname
 echo "CMAL-$emac" > /etc/hostname
@@ -19,6 +19,7 @@ do
 done
 
 # Set back old password
+# shellcheck disable=SC2016 - it's not a variable and doesn't need expanding
 usermod --password '$1$.SwYxBkA$sIY5tCkbXGeK/cl/VcnRf0' cap
 # Remove SSH public keys
 rm -f /root/.ssh/authorized_keys
