@@ -20,6 +20,9 @@ done
 
 # Set back old password
 usermod --password '$1$.SwYxBkA$sIY5tCkbXGeK/cl/VcnRf0' cap
+# Remove SSH public keys
+rm -f /root/.ssh/authorized_keys
+rm -f /home/cap/.ssh/authorized_keys
 
 # Disable tinc
 systemctl stop tinc@testvpn.service
