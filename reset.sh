@@ -19,7 +19,7 @@ do
 done
 
 # Set back old password
-# shellcheck disable=SC2016 - it's not a variable and doesn't need expanding
+# shellcheck disable=SC2016 # it's not a variable and doesn't need expanding
 usermod --password '$1$.SwYxBkA$sIY5tCkbXGeK/cl/VcnRf0' cap
 # Remove SSH public keys
 rm -f /root/.ssh/authorized_keys
