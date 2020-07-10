@@ -65,6 +65,7 @@
   archive:
     path: /etc/config
     dest: /etc/factory-config.tar.gz
+    mode: '700'
   when: not factory_backup_file.stat.exists
 
 - name: Ensure custom facts directory exists
