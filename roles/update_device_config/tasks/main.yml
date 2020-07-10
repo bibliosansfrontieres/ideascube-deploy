@@ -56,10 +56,17 @@
 
 - debug: msg="Start playbook {{ ansible_date_time["date"] }} - {{ ansible_date_time["time"] }} - I'm a {{ project_type }} / {{full_device_name}}"
 
-- name: Backup current configuration
+- name: Check wether a factory configuration backup exists
+  stat:
+    path: /etc/factory-config.tar.gz
+  register: factory_backup_file
+
+- name: Backup factory configuration
   archive:
     path: /etc/config
-    dest: /etc/factory-config.tgz
+    dest: /etc/factory-config.tar.gz
+    mode: '700'
+  when: not factory_backup_file.stat.exists
 
 - name: Ensure custom facts directory exists
   file:
