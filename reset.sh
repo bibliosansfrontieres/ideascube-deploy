@@ -37,6 +37,8 @@ rm -rf /var/lib/balena-engine/
 
 # Clean initcap
 rm -f /var/spool/cron/crontabs/root
+rm -f /usr/local/bin/initcap.py
+rm -f /usr/local/bin/callback.py
 rm -f /opt/*
 
 
