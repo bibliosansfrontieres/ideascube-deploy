@@ -2,6 +2,11 @@
 
 # This script soft reset the CAP and format the HHD
 
+if [ "$(id -u)" != 0 ]; then
+   >&2 echo "Error: this script must be run as root."
+   exit 13  # EACCES
+fi
+
 # Erase the current configuration with a backup
 cd / && tar xvf /etc/factory-config.tgz
 
