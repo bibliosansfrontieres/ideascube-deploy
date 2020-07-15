@@ -32,6 +32,7 @@
     dpkg_options: 'force-confold,force-confdef'
   vars:
     packages:
+    - locate  # see c247592
     - nginx
 
 - name: Remove unwanted files
