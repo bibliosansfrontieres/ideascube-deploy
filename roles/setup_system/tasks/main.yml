@@ -17,7 +17,6 @@
     - git
     - lsb-release
     - vim
-    - locate
     - unzip
     - bash-completion
     - hdparm
