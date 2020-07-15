@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script soft reset the CAP and format the HHD
 
@@ -7,15 +7,10 @@ if [ "$(id -u)" != 0 ]; then
    exit 13  # EACCES
 fi
 
+
+
 # Erase the current configuration with a backup
 cd / && tar xvf /etc/factory-config.tgz
-
-# get eth first mac and get the laste 2 numbers
-addr=$( find /sys/class/net/ | grep -m1 'enp2s0' )
-emac=$( awk -F":" '{ print $5 $6 }' "$addr/address" )
-
-# Set a default hostname
-echo "CMAL-$emac" > /etc/hostname
 
 # Remove files executed at start up
 for files in 45-pull-containers 49-cache-server 50-update-content 60-push-log
@@ -52,5 +47,21 @@ rm -f /data
 umount -A -l /dev/sda1
 mkfs.ext4 -F /dev/sda1
 
-# Shutdown the device
-reboot
+## Reset hostname and SSID
+
+# get eth first mac
+addr=$( find /sys/class/net/ | grep -m1 'enp2s0' )
+emac=$( awk -F":" '{ print $5 $6 }' "$addr/address" )
+
+echo "Resetting the hostname to the factory one... (/etc/hostname, /etc/hosts)"
+echo "CMAL-${emac}" > /etc/hostname
+sed -i -e "s,$( awk -F" " ' /127.0.1.1/ { print $2 }' /etc/hosts ),CMAL-${emac},g" /etc/hosts
+
+echo "Resetting the content host name... (uci)"
+uci set system.@system[0].hostname=my.content
+uci commit system
+
+echo "Restting the SSID..."
+uci set wireless.@wifi-iface[0].ssid=CMAL-2.4G-${emac}
+uci set wireless.@wifi-iface[1].ssid=CMAL-5G-${emac}
+uci commit wireless
