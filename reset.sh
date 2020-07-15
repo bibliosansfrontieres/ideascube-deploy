@@ -48,4 +48,4 @@ umount -A -l /dev/sda1
 mkfs.ext4 -F /dev/sda1
 
 # Shutdown the device
-sudo reboot
+reboot
