@@ -1,16 +1,34 @@
 #!/bin/bash
 
-# This script soft reset the CAP and format the HHD
+# This script soft resets the CAP and formats the HHD.
+# Usage:
+#   reset.sh                  Keep the BSF access means (SSH keys, VPN)
+#   reset.sh rm-bsf-access    Remove the BSF access means (SSH keys, VPN)
 
 if [ "$(id -u)" != 0 ]; then
    >&2 echo "Error: this script must be run as root."
    exit 13  # EACCES
 fi
 
+rm_bsf_access=0
+[ "$1" == "rm-bsf-access" ] && rm_bsf_access=1
 
+[ $rm_bsf_access -eq 0 ] && {
+   # get tinc informations
+   tinc_ifname=$( uci get network.tinc.ifname )
+   tinc_macaddr=$( uci get network.tinc.macaddr )
+}
 
 # Erase the current configuration with a backup
 cd / && tar xvf /etc/factory-config.tgz
+# But restore the tinc interface
+[ $rm_bsf_access -eq 0 ] && {
+   uci set network.tinc='interface'
+   uci set network.tinc.ifname="${tinc_ifname}"
+   uci set network.tinc.proto='dhcp'
+   uci set network.tinc.macaddr="${tinc_macaddr}"
+   uci commit network
+}
 
 # Remove files executed at start up
 for files in 45-pull-containers 49-cache-server 50-update-content 60-push-log
@@ -18,17 +36,18 @@ do
    rm -f /etc/hotplug.d/iface/$files
 done
 
-# Set back old password
-# shellcheck disable=SC2016 # it's not a variable and doesn't need expanding
-usermod --password '$1$.SwYxBkA$sIY5tCkbXGeK/cl/VcnRf0' cap
-# Remove SSH public keys
-rm -f /root/.ssh/authorized_keys
-rm -f /home/cap/.ssh/authorized_keys
-
-# Disable tinc
-systemctl stop tinc@testvpn.service
-systemctl disable tinc@testvpn.service
-rm -rf /etc/tinc/
+[ $rm_bsf_access -eq 1 ] && {
+   # Set back old password
+   # shellcheck disable=SC2016 # it's not a variable and doesn't need expanding
+   usermod --password '$1$.SwYxBkA$sIY5tCkbXGeK/cl/VcnRf0' cap
+   # Remove SSH public keys
+   rm -f /root/.ssh/authorized_keys
+   rm -f /home/cap/.ssh/authorized_keys
+   # Disable tinc
+   systemctl stop tinc@testvpn.service
+   systemctl disable tinc@testvpn.service
+   rm -rf /etc/tinc/
+}
 
 # Clean up balena-engine data
 systemctl stop balena-engine
@@ -62,6 +81,6 @@ uci set system.@system[0].hostname=my.content
 uci commit system
 
 echo "Restting the SSID..."
-uci set wireless.@wifi-iface[0].ssid=CMAL-2.4G-${emac}
-uci set wireless.@wifi-iface[1].ssid=CMAL-5G-${emac}
+uci set wireless.@wifi-iface[0].ssid="CMAL-2.4G-${emac}"
+uci set wireless.@wifi-iface[1].ssid="CMAL-5G-${emac}"
 uci commit wireless
