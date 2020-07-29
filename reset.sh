@@ -20,7 +20,9 @@ rm_bsf_access=0
 }
 
 # Erase the current configuration with a backup
-cd / && tar xvf /etc/factory-config.tgz
+wget https://bibliosansfrontieres.gitlab.io/toolbox/cap/factory-config/factory-config.tar.bz2 \
+  -O /root/factory-config.tar.bz2
+cd / && tar xvfjp /root/factory-config.tar.bz2
 # But restore the tinc interface
 [ $rm_bsf_access -eq 0 ] && {
    uci set network.tinc='interface'
