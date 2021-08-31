@@ -23,7 +23,7 @@ curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/id
 
 ## Reset a device
 
-Note: the URL is subject to change to the [GitLab repository](https://gitlab.com/bibliosansfrontieres/toolbox/cap/factory-config)
+Note: the URL is subject to change to the [GitLab repository](https://gitlab.com/bibliosansfrontieres/olip-bsf/cap/factory-config)
 as soon as [Temps Modernes](https://gitlab.com/bibliosansfrontieres/tm/factory_manager)
 is updated to use it as well.
 

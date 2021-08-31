@@ -20,7 +20,7 @@ rm_bsf_access=0
 }
 
 # Erase the current configuration with a backup
-wget https://bibliosansfrontieres.gitlab.io/toolbox/cap/factory-config/factory-config.tar.bz2 \
+wget https://bibliosansfrontieres.gitlab.io/olip-bsf/cap/factory-config/factory-config.tar.bz2 \
   -O /root/factory-config.tar.bz2
 cd / && tar xvfjp /root/factory-config.tar.bz2
 # But restore the tinc interface
