@@ -23,20 +23,4 @@ curl -sfL https://github.com/bibliosansfrontieres/ideascube-deploy/raw/master/id
 
 ## Reset a device
 
-Note: the URL is subject to change to the [GitLab repository](https://gitlab.com/bibliosansfrontieres/olip-bsf/cap/factory-config)
-as soon as [Temps Modernes](https://gitlab.com/bibliosansfrontieres/tm/factory_manager)
-is updated to use it as well.
-
-```shell
-wget https://raw.githubusercontent.com/bibliosansfrontieres/ideascube-deploy/master/reset.sh
-bash reset.sh
-```
-
-By default this script will keep our remote access means:
-* SSH keys
-* tinc VPN (configuration, keys)
-
-If you want to remove that also, use the `rm-bsf-access` argument:
-```shell
-bash reset.sh rm-bsf-access
-```
+See [`cap/factory-config`](https://gitlab.com/bibliosansfrontieres/olip-bsf/cap/factory-config).
